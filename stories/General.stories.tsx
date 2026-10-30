@@ -3,7 +3,7 @@ import { Button, ButtonGroup, Card, Divider, IconButton, Paragraph, Space, Text,
 import { DownloadIcon, PlusIcon, HeartIcon, TrashIcon, ShareIcon, ChevronLeftIcon, ChevronRightIcon, SettingsIcon } from 'liquidglass-ui/icons';
 
 const meta: Meta<typeof Button> = {
-  title: 'General/Button',
+  title: 'General',
   component: Button,
   args: { children: 'Button', variant: 'glass', color: 'default', size: 'md', shape: 'default', loading: false, disabled: false, block: false },
   argTypes: {
