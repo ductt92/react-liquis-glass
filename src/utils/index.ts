@@ -118,3 +118,15 @@ export function mergeRefs<T>(...refs: (React.Ref<T> | undefined)[]) {
 export type Size = 'sm' | 'md' | 'lg';
 export type Status = 'success' | 'warning' | 'error' | 'info';
 export type ColorName = 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'default';
+
+/**
+ * Lower-cases and strips diacritics so search matches "ha noi" ⇄ "Hà Nội".
+ * Keeps one output char per input char for precomposed (NFC) text, so indexes line up for highlighting.
+ */
+export function normalizeText(s: string): string {
+  return s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[đĐ]/g, 'd')
+    .toLowerCase();
+}

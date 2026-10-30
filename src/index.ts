@@ -78,6 +78,37 @@ export type { AlertProps, ModalProps, DrawerProps, ResultProps } from './compone
 export { message, notification } from './components/Toast';
 export type { MessageOptions, NotificationOptions } from './components/Toast';
 
+// Pickers
+export { AutoComplete, TimePicker, RangePicker, ColorPicker } from './components/Pickers';
+export type { AutoCompleteProps, AutoCompleteOption, TimePickerProps, RangePickerProps, DateRange, ColorPickerProps } from './components/Pickers';
+
+// Tree & cascader
+export { Tree, TreeSelect, Cascader, Transfer } from './components/TreeData';
+export type { TreeNode, TreeProps, TreeSelectProps, CascaderOption, CascaderProps, TransferItem, TransferProps } from './components/TreeData';
+
+// App shell
+export { Layout, Header, Sider, Content, Footer, useSider } from './components/AppLayout';
+export type { LayoutProps, HeaderProps, SiderProps } from './components/AppLayout';
+
+// Media
+export { Carousel, Image, ImagePreviewGroup } from './components/Media';
+export type { CarouselProps, ImageProps } from './components/Media';
+
+// Extras
+export { FloatButton, FloatButtonGroup, BackTop, Watermark, Kbd, Countdown, formatCountdown, Anchor } from './components/Extras';
+export type {
+  FloatButtonProps,
+  FloatButtonGroupProps,
+  BackTopProps,
+  WatermarkProps,
+  KbdProps,
+  CountdownProps,
+  AnchorProps,
+  AnchorItem,
+} from './components/Extras';
+export { confirm } from './components/Confirm';
+export type { ConfirmOptions, ConfirmHandle } from './components/Confirm';
+
 // Utils
-export { cx } from './utils';
+export { cx, normalizeText } from './utils';
 export type { Size, ColorName } from './utils';

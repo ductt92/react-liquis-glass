@@ -1,0 +1,114 @@
+/* ───────── AutoComplete ───────── */
+.lg-ac-match { background: none; color: var(--lg-accent); font-weight: 650; padding: 0; }
+
+/* ───────── Shared picker footer button ───────── */
+.lg-picker-ok {
+  height: 28px; padding: 0 14px; border: 0; border-radius: var(--lg-radius-pill);
+  background: linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0) 60%), var(--lg-accent);
+  color: #fff; font: inherit; font-weight: 600; font-size: 13px; cursor: pointer;
+  transition: filter .15s, transform .2s var(--lg-spring);
+}
+.lg-picker-ok:hover { filter: brightness(1.06); }
+.lg-picker-ok:active { transform: scale(.94); }
+
+/* ───────── TimePicker ───────── */
+.lg-time-panel { border-radius: var(--lg-radius-lg); padding: 8px; box-shadow: inset 0 1px 0.5px var(--lg-glass-edge), var(--lg-glass-shadow-lg); }
+.lg-time-columns { display: flex; gap: 4px; }
+.lg-time-column {
+  list-style: none; margin: 0; padding: 4px 0 172px; width: 56px; height: 224px; overflow-y: auto;
+  scrollbar-width: none; overscroll-behavior: contain; scroll-behavior: smooth;
+}
+.lg-time-column::-webkit-scrollbar { display: none; }
+.lg-time-column + .lg-time-column { border-left: 1px solid var(--lg-line); padding-left: 4px; }
+.lg-time-cell {
+  display: flex; align-items: center; justify-content: center; height: 32px; margin: 1px 0; border-radius: 10px;
+  color: var(--lg-text); font-variant-numeric: tabular-nums; cursor: pointer; transition: background .12s;
+}
+.lg-time-cell:hover { background: var(--lg-fill); }
+.lg-time-cell.lg-selected { background: color-mix(in srgb, var(--lg-accent) 16%, transparent); color: var(--lg-accent); font-weight: 650; }
+.lg-time-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; padding-top: 8px; border-top: 1px solid var(--lg-line); }
+
+/* ───────── RangePicker ───────── */
+.lg-range-input { gap: 8px; }
+.lg-range-value { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
+.lg-range-sep { color: var(--lg-text-3); flex-shrink: 0; }
+.lg-range-panel { display: flex; border-radius: var(--lg-radius-lg); padding: 10px; box-shadow: inset 0 1px 0.5px var(--lg-glass-edge), var(--lg-glass-shadow-lg); max-width: calc(100vw - 16px); overflow-x: auto; }
+.lg-range-presets { list-style: none; margin: 0 10px 0 0; padding: 0 10px 0 0; border-right: 1px solid var(--lg-line); display: flex; flex-direction: column; gap: 2px; min-width: 112px; }
+.lg-range-presets button {
+  width: 100%; padding: 7px 10px; border: 0; border-radius: 10px; background: none; color: var(--lg-text);
+  font: inherit; font-size: 13px; text-align: left; cursor: pointer; white-space: nowrap; transition: background .12s;
+}
+.lg-range-presets button:hover { background: var(--lg-fill); color: var(--lg-accent); }
+.lg-range-months { display: flex; gap: 20px; }
+.lg-range-month { width: 266px; }
+.lg-range-spacer { width: 62px; flex-shrink: 0; }
+.lg-range-grid { column-gap: 0; }
+.lg-range-cell { position: relative; display: flex; justify-content: center; }
+.lg-range-cell::before { content: ''; position: absolute; top: 2px; bottom: 2px; left: 0; right: 0; pointer-events: none; }
+.lg-range-cell.lg-in-range::before { background: color-mix(in srgb, var(--lg-accent) 14%, transparent); }
+.lg-range-cell.lg-range-start::before { left: 50%; background: color-mix(in srgb, var(--lg-accent) 14%, transparent); }
+.lg-range-cell.lg-range-end::before { right: 50%; background: color-mix(in srgb, var(--lg-accent) 14%, transparent); }
+.lg-range-cell .lg-calendar-cell { position: relative; width: 36px; }
+.lg-range-cell.lg-in-range .lg-calendar-cell:hover:not(:disabled) { background: color-mix(in srgb, var(--lg-accent) 20%, transparent); }
+.lg-range-empty { height: 36px; }
+
+/* ───────── ColorPicker ───────── */
+.lg-color-checker {
+  background-color: #fff;
+  background-image:
+    linear-gradient(45deg, #d6d9e0 25%, transparent 25%), linear-gradient(-45deg, #d6d9e0 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #d6d9e0 75%), linear-gradient(-45deg, transparent 75%, #d6d9e0 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+}
+.lg-color-swatch-fill { position: absolute; inset: 0; border-radius: inherit; }
+
+.lg-color-trigger {
+  display: inline-flex; align-items: center; gap: 8px; height: var(--lg-h-md); padding: 4px; border-radius: var(--lg-radius);
+  color: var(--lg-text); font: inherit; cursor: pointer; transition: transform .2s var(--lg-spring);
+}
+.lg-color-trigger:active:not(:disabled) { transform: scale(.95); }
+.lg-color-trigger:disabled { opacity: .5; cursor: not-allowed; }
+.lg-color-trigger-sm { height: var(--lg-h-sm); border-radius: var(--lg-radius-sm); }
+.lg-color-trigger-lg { height: var(--lg-h-lg); }
+.lg-color-trigger-text { padding-right: 12px; }
+.lg-color-swatch { position: relative; height: 100%; aspect-ratio: 1; border-radius: calc(var(--lg-radius) - 4px); overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+.lg-color-trigger-sm .lg-color-swatch { border-radius: calc(var(--lg-radius-sm) - 3px); }
+.lg-color-text { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 13px; }
+
+.lg-color-panel { width: 248px; padding: 12px; border-radius: var(--lg-radius-lg); box-shadow: inset 0 1px 0.5px var(--lg-glass-edge), var(--lg-glass-shadow-lg); }
+.lg-color-sv {
+  position: relative; height: 150px; border-radius: 12px; cursor: crosshair; touch-action: none; outline-offset: 2px;
+}
+.lg-color-sv::before { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(to right, #fff, transparent); }
+.lg-color-sv::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(to top, #000, transparent); box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+.lg-color-sv-thumb, .lg-color-bar-thumb {
+  position: absolute; z-index: 1; width: 18px; height: 18px; border-radius: 50%; transform: translate(-50%, -50%);
+  border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.3), inset 0 0 0 1px rgba(0,0,0,.08); pointer-events: none;
+}
+.lg-color-sliders { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.lg-color-bars { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.lg-color-bar { position: relative; height: 12px; border-radius: 6px; cursor: pointer; touch-action: none; outline-offset: 2px; }
+.lg-color-bar-thumb { top: 50%; }
+.lg-color-hue { background: linear-gradient(90deg, #f00, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00); }
+.lg-color-alpha {
+  background-color: #fff;
+  background-image:
+    linear-gradient(45deg, #d6d9e0 25%, transparent 25%), linear-gradient(-45deg, #d6d9e0 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #d6d9e0 75%), linear-gradient(-45deg, transparent 75%, #d6d9e0 75%);
+  background-size: 8px 8px; background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+}
+.lg-color-alpha-fill { position: absolute; inset: 0; border-radius: inherit; }
+.lg-color-preview { position: relative; width: 32px; height: 32px; border-radius: 10px; overflow: hidden; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+.lg-color-inputs { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+.lg-color-hex { flex: 1; width: auto; min-width: 0; }
+.lg-color-hex .lg-input-prefix { font-size: 11px; font-weight: 650; color: var(--lg-text-3); }
+.lg-color-hex .lg-input-el { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 13px; }
+.lg-color-alpha-text { font-size: 13px; color: var(--lg-text-2); font-variant-numeric: tabular-nums; min-width: 38px; text-align: right; }
+.lg-color-presets { display: grid; grid-template-columns: repeat(auto-fill, minmax(22px, 1fr)); gap: 6px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--lg-line); }
+.lg-color-preset {
+  position: relative; aspect-ratio: 1; padding: 0; border: 0; border-radius: 7px; cursor: pointer; overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.1); transition: transform .2s var(--lg-spring);
+}
+.lg-color-preset:hover { transform: scale(1.12); }
+.lg-color-preset.lg-selected { box-shadow: 0 0 0 2px var(--lg-glass-bg-strong), 0 0 0 4px var(--lg-accent); }

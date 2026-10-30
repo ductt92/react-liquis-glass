@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { cx, useControlled, useId, type Size } from '../utils';
+import { cx, useControlled, useId, type Size, normalizeText } from '../utils';
 import { Popup } from './Popup';
 import { CheckIcon, ChevronDownIcon, CloseIcon, CloseCircleFilledIcon, SearchIcon } from '../icons';
 
@@ -63,14 +63,14 @@ function SelectImpl<V extends string | number = string>(props: SelectProps<V>) {
   const listRef = React.useRef<HTMLDivElement>(null);
 
   const flat = React.useMemo(() => options.flatMap((o) => (isGroup(o) ? o.options : [o])), [options]);
-  const q = query.trim().toLowerCase();
+  const q = normalizeText(query.trim());
   const filteredGroups = React.useMemo(
     () =>
       options
         .map((o) =>
           isGroup(o)
-            ? { ...o, options: o.options.filter((x) => !q || textOf(x).toLowerCase().includes(q)) }
-            : !q || textOf(o).toLowerCase().includes(q)
+            ? { ...o, options: o.options.filter((x) => !q || normalizeText(textOf(x)).includes(q)) }
+            : !q || normalizeText(textOf(o)).includes(q)
               ? o
               : null,
         )
