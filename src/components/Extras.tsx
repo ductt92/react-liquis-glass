@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cx } from '../utils';
-import { Portal } from './ConfigProvider';
+import { Portal, useLocale } from './ConfigProvider';
 import { Tooltip } from './Overlay';
 import { Badge } from './Display';
 import { ArrowUpIcon, CloseIcon, PlusIcon } from '../icons';
@@ -125,7 +125,9 @@ export interface BackTopProps extends Omit<FloatButtonProps, 'onClick' | 'target
   onClick?: () => void;
 }
 
-export const BackTop: React.FC<BackTopProps> = ({ visibilityHeight = 400, target, onClick, icon, tooltip = 'Back to top', ...rest }) => {
+export const BackTop: React.FC<BackTopProps> = ({ visibilityHeight = 400, target, onClick, icon, tooltip: tooltipProp, ...rest }) => {
+  const t = useLocale();
+  const tooltip = tooltipProp === undefined ? t.backToTop : tooltipProp;
   const [visible, setVisible] = React.useState(false);
   React.useEffect(() => {
     const t = target?.() ?? window;
@@ -338,6 +340,7 @@ export interface AnchorProps {
 const flatten = (items: AnchorItem[]): AnchorItem[] => items.flatMap((i) => [i, ...flatten(i.children ?? [])]);
 
 export const Anchor: React.FC<AnchorProps> = ({ items, offsetTop = 0, getContainer, onChange, className, style }) => {
+  const t = useLocale();
   const [active, setActive] = React.useState<string>('');
   const listRef = React.useRef<HTMLUListElement>(null);
   const [ind, setInd] = React.useState<{ top: number; height: number } | null>(null);
@@ -407,7 +410,7 @@ export const Anchor: React.FC<AnchorProps> = ({ items, offsetTop = 0, getContain
     ));
 
   return (
-    <nav className={cx('lg-anchor', className)} style={style} aria-label="On this page">
+    <nav className={cx('lg-anchor', className)} style={style} aria-label={t.onThisPage}>
       <span className="lg-anchor-rail" />
       {ind && <span className="lg-anchor-indicator" style={{ transform: `translateY(${ind.top}px)`, height: ind.height }} />}
       <ul ref={listRef}>{render(items, 0)}</ul>

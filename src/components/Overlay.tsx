@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { cx } from '../utils';
+import { useLocale } from './ConfigProvider';
 import { Popup, type Placement, type Trigger } from './Popup';
 import { Button } from './Button';
 import { WarningFilledIcon } from '../icons';
@@ -80,7 +81,8 @@ export interface PopconfirmProps {
   placement?: Placement;
   children: React.ReactElement;
 }
-export const Popconfirm: React.FC<PopconfirmProps> = ({ title, description, onConfirm, onCancel, okText = 'OK', cancelText = 'Cancel', okDanger, icon, placement = 'top', children }) => {
+export const Popconfirm: React.FC<PopconfirmProps> = ({ title, description, onConfirm, onCancel, okText, cancelText, okDanger, icon, placement = 'top', children }) => {
+  const t = useLocale();
   const [loading, setLoading] = React.useState(false);
   return (
     <Popover
@@ -103,7 +105,7 @@ export const Popconfirm: React.FC<PopconfirmProps> = ({ title, description, onCo
                 close();
               }}
             >
-              {cancelText}
+              {cancelText ?? t.cancel}
             </Button>
             <Button
               size="sm"
@@ -123,7 +125,7 @@ export const Popconfirm: React.FC<PopconfirmProps> = ({ title, description, onCo
                 close();
               }}
             >
-              {okText}
+              {okText ?? t.ok}
             </Button>
           </div>
         </div>

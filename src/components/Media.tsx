@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cx, useEscape, usePresence, useScrollLock } from '../utils';
-import { Portal } from './ConfigProvider';
+import { Portal, useLocale } from './ConfigProvider';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -44,6 +44,7 @@ export const Carousel: React.FC<CarouselProps> = ({
   className,
   style,
 }) => {
+  const t = useLocale();
   const slides = React.Children.toArray(children);
   const count = slides.length;
   const [inner, setInner] = React.useState(defaultCurrent);
@@ -119,10 +120,10 @@ export const Carousel: React.FC<CarouselProps> = ({
       </div>
       {arrows && count > 1 && (
         <>
-          <button type="button" className="lg-carousel-arrow lg-carousel-prev lg-glass" aria-label="Previous slide" disabled={!loop && current === 0} onClick={() => go(current - 1)}>
+          <button type="button" className="lg-carousel-arrow lg-carousel-prev lg-glass" aria-label={t.prevSlide} disabled={!loop && current === 0} onClick={() => go(current - 1)}>
             <ChevronLeftIcon />
           </button>
-          <button type="button" className="lg-carousel-arrow lg-carousel-next lg-glass" aria-label="Next slide" disabled={!loop && current === count - 1} onClick={() => go(current + 1)}>
+          <button type="button" className="lg-carousel-arrow lg-carousel-next lg-glass" aria-label={t.nextSlide} disabled={!loop && current === count - 1} onClick={() => go(current + 1)}>
             <ChevronRightIcon />
           </button>
         </>
@@ -162,6 +163,7 @@ interface LightboxProps {
 }
 
 const Lightbox: React.FC<LightboxProps> = ({ open, images, index, onIndexChange, onClose }) => {
+  const t = useLocale();
   const { mounted, visible } = usePresence(open, 260);
   const [scale, setScale] = React.useState(1);
   const [rotate, setRotate] = React.useState(0);
@@ -184,7 +186,7 @@ const Lightbox: React.FC<LightboxProps> = ({ open, images, index, onIndexChange,
   const zoom = (d: number) => setScale((s) => Math.min(4, Math.max(0.25, +(s + d).toFixed(2))));
   return (
     <Portal>
-      <div className={cx('lg-lightbox', visible && 'lg-open')} role="dialog" aria-modal="true" aria-label="Image preview">
+      <div className={cx('lg-lightbox', visible && 'lg-open')} role="dialog" aria-modal="true" aria-label={t.imagePreview}>
         <div className="lg-mask lg-lightbox-mask" onClick={onClose} />
         <div
           className="lg-lightbox-stage"
@@ -201,23 +203,23 @@ const Lightbox: React.FC<LightboxProps> = ({ open, images, index, onIndexChange,
         </div>
         {images.length > 1 && (
           <>
-            <button type="button" className="lg-lightbox-nav lg-lightbox-prev lg-glass" aria-label="Previous image" onClick={() => onIndexChange((index - 1 + images.length) % images.length)}>
+            <button type="button" className="lg-lightbox-nav lg-lightbox-prev lg-glass" aria-label={t.prevImage} onClick={() => onIndexChange((index - 1 + images.length) % images.length)}>
               <ChevronLeftIcon />
             </button>
-            <button type="button" className="lg-lightbox-nav lg-lightbox-next lg-glass" aria-label="Next image" onClick={() => onIndexChange((index + 1) % images.length)}>
+            <button type="button" className="lg-lightbox-nav lg-lightbox-next lg-glass" aria-label={t.nextImage} onClick={() => onIndexChange((index + 1) % images.length)}>
               <ChevronRightIcon />
             </button>
           </>
         )}
-        <button type="button" className="lg-lightbox-close lg-glass" aria-label="Close preview" onClick={onClose}>
+        <button type="button" className="lg-lightbox-close lg-glass" aria-label={t.close} onClick={onClose}>
           <CloseIcon />
         </button>
         <div className="lg-lightbox-toolbar lg-glass lg-glass-strong">
           {images.length > 1 && <span className="lg-lightbox-count">{index + 1} / {images.length}</span>}
-          <button type="button" aria-label="Zoom out" onClick={() => zoom(-0.25)}><ZoomOutIcon /></button>
+          <button type="button" aria-label={t.zoomOut} onClick={() => zoom(-0.25)}><ZoomOutIcon /></button>
           <span className="lg-lightbox-scale">{Math.round(scale * 100)}%</span>
-          <button type="button" aria-label="Zoom in" onClick={() => zoom(0.25)}><ZoomInIcon /></button>
-          <button type="button" aria-label="Rotate" onClick={() => setRotate((r) => r + 90)}><RefreshIcon /></button>
+          <button type="button" aria-label={t.zoomIn} onClick={() => zoom(0.25)}><ZoomInIcon /></button>
+          <button type="button" aria-label={t.rotate} onClick={() => setRotate((r) => r + 90)}><RefreshIcon /></button>
         </div>
       </div>
     </Portal>

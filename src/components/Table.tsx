@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { cx, useControlled } from '../utils';
+import { useLocale } from './ConfigProvider';
 import { Checkbox } from './Selection';
 import { Pagination, type PaginationProps } from './Navigation';
 import { Empty } from './Display';
@@ -66,6 +67,7 @@ export function Table<T extends Record<string, any>>({
   className,
   style,
 }: TableProps<T>) {
+  const t = useLocale();
   const [sort, setSort] = React.useState<{ key: string; order: SortOrder }>({ key: '', order: null });
   const pageSize = (pagination && pagination.pageSize) || 10;
   const [page, setPage] = useControlled(pagination ? pagination.current : undefined, 1, pagination ? (p: number) => pagination.onChange?.(p, pageSize) : undefined);
@@ -108,7 +110,7 @@ export function Table<T extends Record<string, any>>({
                     <Checkbox
                       checked={allChecked}
                       indeterminate={someChecked}
-                      aria-label="Select all rows"
+                      aria-label={t.selectAll}
                       onChange={(c) => updateSelection(c ? Array.from(new Set([...selected, ...pageKeys])) : selected.filter((k) => !pageKeys.includes(k)))}
                     />
                   </th>
@@ -149,7 +151,7 @@ export function Table<T extends Record<string, any>>({
                   <tr key={k} className={cx(isSel && 'lg-table-row-selected', onRowClick && 'lg-table-row-clickable')} onClick={onRowClick ? () => onRowClick(r, i) : undefined}>
                     {rowSelection && (
                       <td className="lg-table-selection" onClick={(e) => e.stopPropagation()}>
-                        <Checkbox checked={isSel} aria-label="Select row" onChange={(c) => updateSelection(c ? [...selected, k] : selected.filter((x) => x !== k))} />
+                        <Checkbox checked={isSel} aria-label={t.selectRow} onChange={(c) => updateSelection(c ? [...selected, k] : selected.filter((x) => x !== k))} />
                       </td>
                     )}
                     {columns.map((c) => {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { cx } from '../utils';
-import { globalConfig } from './ConfigProvider';
+import { ConfigBridge, globalConfig, useLocale } from './ConfigProvider';
 import { statusIcon } from './Feedback';
 import { CloseIcon, LoadingIcon } from '../icons';
 
@@ -60,6 +60,7 @@ function push(e: Omit<ToastEntry, 'id'>) {
 }
 
 const ToastItem: React.FC<{ e: ToastEntry }> = ({ e }) => {
+  const t = useLocale();
   const icon = e.icon ?? (e.kind === 'loading' ? <LoadingIcon spin /> : statusIcon[e.kind]);
   if (e.channel === 'message')
     return (
@@ -77,7 +78,7 @@ const ToastItem: React.FC<{ e: ToastEntry }> = ({ e }) => {
         {e.btn && <div className="lg-notification-btn">{e.btn}</div>}
       </div>
       {e.closable !== false && (
-        <button type="button" aria-label="Close" className="lg-close-btn" onClick={() => remove(e.id)}>
+        <button type="button" aria-label={t.close} className="lg-close-btn" onClick={() => remove(e.id)}>
           <CloseIcon />
         </button>
       )}
@@ -97,6 +98,7 @@ const ToastHost: React.FC = () => {
   }, []);
   const { theme, vars } = globalConfig.current;
   return (
+    <ConfigBridge>
     <div className="lg-root lg-portal" data-lg-theme={theme} style={vars}>
       {PLACEMENTS.map((p) => {
         const list = entries.filter((e) => e.placement === p);
@@ -110,6 +112,7 @@ const ToastHost: React.FC = () => {
         );
       })}
     </div>
+    </ConfigBridge>
   );
 };
 

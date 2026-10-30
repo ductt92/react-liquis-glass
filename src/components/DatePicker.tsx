@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { cx, useControlled, type Size } from '../utils';
+import { useLocale } from './ConfigProvider';
 import { Popup } from './Popup';
 import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon, CloseCircleFilledIcon } from '../icons';
 
@@ -26,10 +27,8 @@ export interface CalendarProps {
   bordered?: boolean;
 }
 
-const DEFAULT_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const DEFAULT_DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-
 export const Calendar: React.FC<CalendarProps> = ({ value, defaultValue = null, onChange, disabledDate, weekStartsOn = 1, locale, className, bordered }) => {
+  const t = useLocale();
   const [val, setVal] = useControlled<Date | null>(value, defaultValue, onChange as (d: Date | null) => void);
   const [view, setView] = React.useState(() => {
     const d = val ?? new Date();
@@ -38,8 +37,8 @@ export const Calendar: React.FC<CalendarProps> = ({ value, defaultValue = null, 
   React.useEffect(() => {
     if (val) setView(new Date(val.getFullYear(), val.getMonth(), 1));
   }, [val]);
-  const months = locale?.months ?? DEFAULT_MONTHS;
-  const days = locale?.weekdays ?? DEFAULT_DAYS;
+  const months = locale?.months ?? t.months;
+  const days = locale?.weekdays ?? t.weekdays;
   const orderedDays = weekStartsOn === 1 ? [...days.slice(1), days[0]] : days;
   const first = (view.getDay() - weekStartsOn + 7) % 7;
   const cells: Date[] = [];
@@ -49,13 +48,13 @@ export const Calendar: React.FC<CalendarProps> = ({ value, defaultValue = null, 
   return (
     <div className={cx('lg-calendar', bordered && 'lg-glass lg-calendar-bordered', className)}>
       <div className="lg-calendar-header">
-        <button type="button" aria-label="Previous year" onClick={() => shift(-12)}><ChevronsLeftIcon /></button>
-        <button type="button" aria-label="Previous month" onClick={() => shift(-1)}><ChevronLeftIcon /></button>
+        <button type="button" aria-label={t.prevYear} onClick={() => shift(-12)}><ChevronsLeftIcon /></button>
+        <button type="button" aria-label={t.prevMonth} onClick={() => shift(-1)}><ChevronLeftIcon /></button>
         <span className="lg-calendar-title">
           {months[view.getMonth()]} {view.getFullYear()}
         </span>
-        <button type="button" aria-label="Next month" onClick={() => shift(1)}><ChevronRightIcon /></button>
-        <button type="button" aria-label="Next year" onClick={() => shift(12)}><ChevronsRightIcon /></button>
+        <button type="button" aria-label={t.nextMonth} onClick={() => shift(1)}><ChevronRightIcon /></button>
+        <button type="button" aria-label={t.nextYear} onClick={() => shift(12)}><ChevronsRightIcon /></button>
       </div>
       <div className="lg-calendar-grid" role="grid">
         {orderedDays.map((d) => (
@@ -81,7 +80,7 @@ export const Calendar: React.FC<CalendarProps> = ({ value, defaultValue = null, 
       </div>
       <div className="lg-calendar-footer">
         <button type="button" className="lg-calendar-today" onClick={() => setVal(new Date(today.getFullYear(), today.getMonth(), today.getDate()))}>
-          {locale?.today ?? 'Today'}
+          {locale?.today ?? t.today}
         </button>
       </div>
     </div>
@@ -105,7 +104,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   defaultValue = null,
   onChange,
   format = 'YYYY-MM-DD',
-  placeholder = 'Select date',
+  placeholder,
   size = 'md',
   disabled,
   allowClear = true,
@@ -114,6 +113,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   style,
   ...calendarProps
 }) => {
+  const t = useLocale();
   const [val, setVal] = useControlled<Date | null>(value, defaultValue);
   const [open, setOpen] = React.useState(false);
   const change = (d: Date | null) => {
@@ -147,12 +147,12 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         style={style}
         onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), setOpen(true))}
       >
-        <span className={cx('lg-datepicker-value', !val && 'lg-select-placeholder')}>{val ? formatDate(val, format) : placeholder}</span>
+        <span className={cx('lg-datepicker-value', !val && 'lg-select-placeholder')}>{val ? formatDate(val, format) : placeholder ?? t.selectDate}</span>
         {allowClear && val && !disabled ? (
           <button
             type="button"
             tabIndex={-1}
-            aria-label="Clear"
+            aria-label={t.clear}
             className="lg-input-clear"
             onClick={(e) => {
               e.stopPropagation();

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { cx, useEscape, usePresence, useScrollLock, useId } from '../utils';
-import { Portal } from './ConfigProvider';
+import { Portal, useLocale } from './ConfigProvider';
 import { Button } from './Button';
 import { CheckCircleFilledIcon, CloseCircleFilledIcon, CloseIcon, InfoFilledIcon, WarningFilledIcon } from '../icons';
 
@@ -27,6 +27,7 @@ export interface AlertProps {
   style?: React.CSSProperties;
 }
 export const Alert: React.FC<AlertProps> = ({ type = 'info', title, description, showIcon = true, icon, closable, onClose, action, banner, className, style }) => {
+  const t = useLocale();
   const [closed, setClosed] = React.useState(false);
   if (closed) return null;
   return (
@@ -40,7 +41,7 @@ export const Alert: React.FC<AlertProps> = ({ type = 'info', title, description,
       {closable && (
         <button
           type="button"
-          aria-label="Close"
+          aria-label={t.close}
           className="lg-close-btn"
           onClick={() => {
             setClosed(true);
@@ -59,20 +60,33 @@ function useFocusTrap(ref: React.RefObject<HTMLElement>, active: boolean) {
   React.useEffect(() => {
     if (!active) return;
     const prev = document.activeElement as HTMLElement | null;
-    const el = ref.current;
     const sel = 'button:not([disabled]),[href],input:not([disabled]),select,textarea,[tabindex]:not([tabindex="-1"])';
-    setTimeout(() => (el?.querySelector<HTMLElement>('[data-autofocus]') ?? el)?.focus(), 30);
+    // The panel mounts a few ticks after `active` flips (presence + portal), so read the ref lazily.
+    let tries = 0;
+    let timer: ReturnType<typeof setTimeout>;
+    const focusInitial = () => {
+      const el = ref.current;
+      if (!el) {
+        if (++tries < 30) timer = setTimeout(focusInitial, 16);
+        return;
+      }
+      (el.querySelector<HTMLElement>('[data-autofocus]') ?? el).focus();
+    };
+    timer = setTimeout(focusInitial, 0);
     const onKey = (e: KeyboardEvent) => {
+      const el = ref.current;
       if (e.key !== 'Tab' || !el) return;
       const f = Array.from(el.querySelectorAll<HTMLElement>(sel));
       if (!f.length) return;
       const first = f[0];
       const last = f[f.length - 1];
-      if (e.shiftKey && document.activeElement === first) (e.preventDefault(), last.focus());
+      if (!el.contains(document.activeElement)) (e.preventDefault(), (e.shiftKey ? last : first).focus());
+      else if (e.shiftKey && document.activeElement === first) (e.preventDefault(), last.focus());
       else if (!e.shiftKey && document.activeElement === last) (e.preventDefault(), first.focus());
     };
     document.addEventListener('keydown', onKey);
     return () => {
+      clearTimeout(timer);
       document.removeEventListener('keydown', onKey);
       prev?.focus?.();
     };
@@ -106,8 +120,8 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   footer,
   onOk,
-  okText = 'OK',
-  cancelText = 'Cancel',
+  okText,
+  cancelText,
   okLoading,
   okDanger,
   width = 480,
@@ -116,6 +130,7 @@ export const Modal: React.FC<ModalProps> = ({
   maskClosable = true,
   className,
 }) => {
+  const t = useLocale();
   const { mounted, visible } = usePresence(open, 260);
   const ref = React.useRef<HTMLDivElement>(null);
   const titleId = useId('lg-modal');
@@ -126,10 +141,10 @@ export const Modal: React.FC<ModalProps> = ({
   const defaultFooter = (
     <>
       <Button variant="glass" onClick={onClose}>
-        {cancelText}
+        {cancelText ?? t.cancel}
       </Button>
       <Button variant="filled" color={okDanger ? 'danger' : 'primary'} loading={okLoading} onClick={onOk} data-autofocus>
-        {okText}
+        {okText ?? t.ok}
       </Button>
     </>
   );
@@ -150,7 +165,7 @@ export const Modal: React.FC<ModalProps> = ({
             <div className="lg-modal-header">
               <div id={titleId} className="lg-modal-title">{title}</div>
               {closable && (
-                <button type="button" aria-label="Close" className="lg-close-btn" onClick={onClose}>
+                <button type="button" aria-label={t.close} className="lg-close-btn" onClick={onClose}>
                   <CloseIcon />
                 </button>
               )}
@@ -180,6 +195,7 @@ export interface DrawerProps {
 }
 
 export const Drawer: React.FC<DrawerProps> = ({ open, onClose, title, placement = 'right', size, footer, extra, closable = true, maskClosable = true, children, className }) => {
+  const t = useLocale();
   const { mounted, visible } = usePresence(open, 340);
   const ref = React.useRef<HTMLDivElement>(null);
   useEscape(() => onClose?.(), open);
@@ -206,7 +222,7 @@ export const Drawer: React.FC<DrawerProps> = ({ open, onClose, title, placement 
               <div className="lg-drawer-title">{title}</div>
               {extra}
               {closable && (
-                <button type="button" aria-label="Close" className="lg-close-btn" onClick={onClose}>
+                <button type="button" aria-label={t.close} className="lg-close-btn" onClick={onClose}>
                   <CloseIcon />
                 </button>
               )}

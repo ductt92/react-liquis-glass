@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { cx, type ColorName, type Size } from '../utils';
+import { useLocale } from './ConfigProvider';
 import { CloseIcon, InboxIcon, LoadingIcon, UserIcon } from '../icons';
 
 /* ───────── Avatar ───────── */
@@ -107,6 +108,7 @@ export interface TagProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'c
 }
 
 export const Tag: React.FC<TagProps> = ({ color = 'default', variant = 'tinted', icon, closable, onClose, size = 'md', checked, onCheckedChange, className, style, children, onClick, ...rest }) => {
+  const t = useLocale();
   const [visible, setVisible] = React.useState(true);
   if (!visible) return null;
   const checkable = checked !== undefined;
@@ -136,7 +138,7 @@ export const Tag: React.FC<TagProps> = ({ color = 'default', variant = 'tinted',
       {closable && (
         <button
           type="button"
-          aria-label="Remove"
+          aria-label={t.remove}
           className="lg-tag-close"
           onClick={(e) => {
             e.stopPropagation();
@@ -187,13 +189,17 @@ export interface EmptyProps {
   children?: React.ReactNode;
   className?: string;
 }
-export const Empty: React.FC<EmptyProps> = ({ image, description = 'No data', children, className }) => (
+export const Empty: React.FC<EmptyProps> = ({ image, description, children, className }) => {
+  const t = useLocale();
+  if (description === undefined) description = t.noData;
+  return (
   <div className={cx('lg-empty', className)}>
     <div className="lg-empty-image lg-glass">{image ?? <InboxIcon />}</div>
     {description && <div className="lg-empty-description">{description}</div>}
     {children && <div className="lg-empty-footer">{children}</div>}
   </div>
-);
+  );
+};
 
 /* ───────── Statistic ───────── */
 export interface StatisticProps {

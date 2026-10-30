@@ -22,12 +22,12 @@ Import the stylesheet once, then wrap your app in `ConfigProvider`:
 
 ```tsx
 import 'liquidglass-ui/styles.css';
-import { ConfigProvider, Button, Card, message } from 'liquidglass-ui';
+import { ConfigProvider, Button, Card, message, viVN } from 'liquidglass-ui';
 import { SparklesIcon } from 'liquidglass-ui/icons';
 
 export default function App() {
   return (
-    <ConfigProvider theme="light" accent="#0a84ff">
+    <ConfigProvider theme="light" accent="#0a84ff" locale={viVN}>
       <Card title="Hello glass">
         <Button variant="filled" color="primary" icon={<SparklesIcon />} onClick={() => message.success('Saved!')}>
           Save
@@ -49,10 +49,13 @@ export default function App() {
   radius={16}           // base corner radius (px)
   blur={24}             // backdrop blur (px)
   refraction            // optional SVG refraction effect (Chromium only)
+  locale={viVN}         // built-in labels: viVN (Tiếng Việt) or enUS (default)
 >
   …
 </ConfigProvider>
 ```
+
+Pass your own `Locale` object (same shape as `viVN`/`enUS`) to translate the built-in labels, placeholders and aria-labels into any other language.
 
 Every token is a CSS variable (`--lg-accent`, `--lg-radius`, `--lg-blur`, `--lg-glass-bg`, …), so you can also override them in your own CSS. Put the `lg-glass` class on any element to give it the glass surface.
 

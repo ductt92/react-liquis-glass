@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { cx, useControlled, type Size, normalizeText } from '../utils';
+import { useLocale } from './ConfigProvider';
 import { Popup } from './Popup';
 import { Checkbox } from './Selection';
 import { Button } from './Button';
@@ -294,6 +295,7 @@ const SelectTrigger = React.forwardRef<HTMLDivElement, TriggerProps & React.HTML
   { open, size, disabled, status, multiple, placeholder, display, tags, showClear, onClear, className, style, onKeyDown, ...rest },
   ref,
 ) {
+  const t = useLocale();
   const empty = multiple ? !tags?.length : display == null;
   return (
     <div
@@ -319,16 +321,16 @@ const SelectTrigger = React.forwardRef<HTMLDivElement, TriggerProps & React.HTML
         {empty && <span className="lg-select-placeholder">{placeholder}</span>}
         {!multiple && !empty && <span className="lg-select-single">{display}</span>}
         {multiple &&
-          tags?.map((t) => (
-            <span key={t.key} className="lg-select-tag">
-              {t.label}
+          tags?.map((tag) => (
+            <span key={tag.key} className="lg-select-tag">
+              {tag.label}
               <button
                 type="button"
                 tabIndex={-1}
-                aria-label="Remove"
+                aria-label={t.remove}
                 onClick={(e) => {
                   e.stopPropagation();
-                  t.onRemove();
+                  tag.onRemove();
                 }}
               >
                 <CloseIcon />
@@ -340,7 +342,7 @@ const SelectTrigger = React.forwardRef<HTMLDivElement, TriggerProps & React.HTML
         <button
           type="button"
           tabIndex={-1}
-          aria-label="Clear"
+          aria-label={t.clear}
           className="lg-input-clear lg-select-clear"
           onClick={(e) => {
             e.stopPropagation();
@@ -356,7 +358,8 @@ const SelectTrigger = React.forwardRef<HTMLDivElement, TriggerProps & React.HTML
   );
 });
 
-const SearchBox: React.FC<{ value: string; onChange: (v: string) => void; placeholder?: string; autoFocus?: boolean }> = ({ value, onChange, placeholder = 'Search…', autoFocus }) => {
+const SearchBox: React.FC<{ value: string; onChange: (v: string) => void; placeholder?: string; autoFocus?: boolean }> = ({ value, onChange, placeholder, autoFocus }) => {
+  const t = useLocale();
   const ref = React.useRef<HTMLInputElement>(null);
   React.useEffect(() => {
     if (autoFocus) setTimeout(() => ref.current?.focus(), 30);
@@ -364,7 +367,7 @@ const SearchBox: React.FC<{ value: string; onChange: (v: string) => void; placeh
   return (
     <div className="lg-select-search">
       <SearchIcon />
-      <input ref={ref} value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+      <input ref={ref} value={value} placeholder={placeholder ?? t.search} onChange={(e) => onChange(e.target.value)} />
     </div>
   );
 };
@@ -400,7 +403,7 @@ export const TreeSelect: React.FC<TreeSelectProps> = ({
   treeCheckable,
   showSearch,
   allowClear,
-  placeholder = 'Select…',
+  placeholder: placeholderProp,
   size = 'md',
   disabled,
   status,
@@ -409,6 +412,7 @@ export const TreeSelect: React.FC<TreeSelectProps> = ({
   className,
   style,
 }) => {
+  const t = useLocale();
   const multiple = !!(multipleProp || treeCheckable);
   const [val, setVal] = useControlled<any>(value, defaultValue ?? (multiple ? [] : null), onChange);
   const [open, setOpen] = React.useState(false);
@@ -431,7 +435,7 @@ export const TreeSelect: React.FC<TreeSelectProps> = ({
       {showSearch && <SearchBox value={query} onChange={setQuery} autoFocus />}
       <div className="lg-treeselect-list">
         {filtered.length === 0 ? (
-          <div className="lg-select-empty">No results</div>
+          <div className="lg-select-empty">{t.noResults}</div>
         ) : (
           <Tree
             treeData={filtered}
@@ -465,7 +469,7 @@ export const TreeSelect: React.FC<TreeSelectProps> = ({
         disabled={disabled}
         status={status}
         multiple={multiple}
-        placeholder={placeholder}
+        placeholder={placeholderProp ?? t.select}
         display={keys[0] != null ? index.byKey.get(keys[0])?.title ?? keys[0] : null}
         tags={tagKeys.map((k) => ({
           key: k,
@@ -534,7 +538,7 @@ export const Cascader: React.FC<CascaderProps> = ({
   expandTrigger = 'click',
   showSearch,
   allowClear = true,
-  placeholder = 'Select…',
+  placeholder: placeholderProp,
   separator = ' / ',
   displayRender,
   size = 'md',
@@ -543,6 +547,7 @@ export const Cascader: React.FC<CascaderProps> = ({
   className,
   style,
 }) => {
+  const t = useLocale();
   const [val, setValInner] = useControlled<(string | number)[]>(value, defaultValue);
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState<(string | number)[]>(val);
@@ -606,7 +611,7 @@ export const Cascader: React.FC<CascaderProps> = ({
       {showSearch && <SearchBox value={query} onChange={setQuery} autoFocus />}
       {query.trim() ? (
         <div className="lg-select-list lg-cascader-search">
-          {searchResults.length === 0 && <div className="lg-select-empty">No results</div>}
+          {searchResults.length === 0 && <div className="lg-select-empty">{t.noResults}</div>}
           {searchResults.map((trail) => (
             <div
               key={trail.map((o) => o.value).join('/')}
@@ -665,7 +670,7 @@ export const Cascader: React.FC<CascaderProps> = ({
         size={size}
         disabled={disabled}
         status={status}
-        placeholder={placeholder}
+        placeholder={placeholderProp ?? t.select}
         display={display}
         showClear={allowClear}
         onClear={() => commit([])}
@@ -716,6 +721,7 @@ interface PanelProps {
 }
 
 const TransferPanel: React.FC<PanelProps> = ({ title, items, checked, setChecked, showSearch, filterOption, render, height, disabled }) => {
+  const t = useLocale();
   const [q, setQ] = React.useState('');
   const shown = q.trim()
     ? items.filter((it) => (filterOption ? filterOption(q, it) : normalizeText(itemText(it)).includes(normalizeText(q.trim()))))
@@ -730,12 +736,12 @@ const TransferPanel: React.FC<PanelProps> = ({ title, items, checked, setChecked
           checked={all}
           indeterminate={some}
           disabled={disabled || enabled.length === 0}
-          aria-label="Select all"
+          aria-label={t.selectAll}
           onChange={(c) => setChecked((prev) => (c ? Array.from(new Set([...prev, ...enabled])) : prev.filter((k) => !enabled.includes(k))))}
         />
         <span className="lg-transfer-count">
           {checked.length > 0 ? `${checked.length}/` : ''}
-          {items.length} items
+          {t.items(items.length)}
         </span>
         <span className="lg-transfer-title">{title}</span>
       </div>
@@ -747,7 +753,7 @@ const TransferPanel: React.FC<PanelProps> = ({ title, items, checked, setChecked
       <ul className="lg-transfer-list" style={{ height }}>
         {shown.length === 0 && (
           <li className="lg-transfer-empty">
-            <Empty description={q ? 'No match' : 'No data'} />
+            <Empty description={q ? t.noMatch : t.noData} />
           </li>
         )}
         {shown.map((it) => {
@@ -798,6 +804,7 @@ export const Transfer: React.FC<TransferProps> = ({
   disabled,
   className,
 }) => {
+  const t = useLocale();
   const [target, setTarget] = useControlled<string[]>(targetKeys, defaultTargetKeys);
   const [leftChecked, setLeftChecked] = React.useState<string[]>([]);
   const [rightChecked, setRightChecked] = React.useState<string[]>([]);
@@ -832,7 +839,7 @@ export const Transfer: React.FC<TransferProps> = ({
           shape="circle"
           variant={leftChecked.length ? 'filled' : 'glass'}
           color="primary"
-          aria-label="Move to target"
+          aria-label={t.moveToTarget}
           icon={<ChevronRightIcon />}
           disabled={disabled || leftChecked.length === 0}
           onClick={() => move('right')}
@@ -842,7 +849,7 @@ export const Transfer: React.FC<TransferProps> = ({
           shape="circle"
           variant={rightChecked.length ? 'filled' : 'glass'}
           color="primary"
-          aria-label="Move to source"
+          aria-label={t.moveToSource}
           icon={<ChevronLeftIcon />}
           disabled={disabled || rightChecked.length === 0}
           onClick={() => move('left')}

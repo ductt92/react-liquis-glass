@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { cx } from '../utils';
+import { useLocale } from './ConfigProvider';
 import { CloudUploadIcon, FileIcon, TrashIcon } from '../icons';
 import { Progress } from './Progress';
 
@@ -56,6 +57,7 @@ export const Upload: React.FC<UploadProps> = ({
   className,
   showList = true,
 }) => {
+  const t = useLocale();
   const [inner, setInner] = React.useState<UploadFile[]>(defaultFileList);
   const files = fileList ?? inner;
   const filesRef = React.useRef(files);
@@ -116,7 +118,7 @@ export const Upload: React.FC<UploadProps> = ({
         {children ?? (
           <>
             <CloudUploadIcon className="lg-upload-icon" />
-            <div className="lg-upload-text">Click or drag files here to upload</div>
+            <div className="lg-upload-text">{t.uploadHint}</div>
             {hint && <div className="lg-upload-hint">{hint}</div>}
           </>
         )}
@@ -131,7 +133,7 @@ export const Upload: React.FC<UploadProps> = ({
                 {f.status === 'uploading' ? (
                   <Progress percent={f.percent ?? 0} size="sm" showInfo={false} />
                 ) : (
-                  <div className="lg-upload-item-meta">{f.status === 'error' ? 'Upload failed' : fmtSize(f.size)}</div>
+                  <div className="lg-upload-item-meta">{f.status === 'error' ? t.uploadFailed : fmtSize(f.size)}</div>
                 )}
               </div>
               <button type="button" aria-label={`Remove ${f.name}`} onClick={() => commit(files.filter((x) => x.uid !== f.uid))}>

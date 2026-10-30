@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { cx, useControlled, type Size } from '../utils';
+import { useLocale } from './ConfigProvider';
 import { CheckIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronsLeftIcon, ChevronsRightIcon, CloseIcon, MoreHorizontalIcon } from '../icons';
 
 /* ───────── Tabs ───────── */
@@ -27,6 +28,7 @@ export interface TabsProps {
 }
 
 export const Tabs: React.FC<TabsProps> = ({ items, activeKey, defaultActiveKey, onChange, onClose, variant = 'line', size = 'md', centered, tabBarExtra, className }) => {
+  const t = useLocale();
   const [active, setActive] = useControlled(activeKey, defaultActiveKey ?? items[0]?.key, onChange);
   const refs = React.useRef<Record<string, HTMLButtonElement | null>>({});
   const [ind, setInd] = React.useState<{ left: number; width: number } | null>(null);
@@ -68,7 +70,7 @@ export const Tabs: React.FC<TabsProps> = ({ items, activeKey, defaultActiveKey, 
               {it.closable && (
                 <span
                   role="button"
-                  aria-label="Close tab"
+                  aria-label={t.closeTab}
                   className="lg-tab-close"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -99,8 +101,10 @@ export interface BreadcrumbItem {
   onClick?: () => void;
   icon?: React.ReactNode;
 }
-export const Breadcrumb: React.FC<{ items: BreadcrumbItem[]; separator?: React.ReactNode; className?: string }> = ({ items, separator = <ChevronRightIcon />, className }) => (
-  <nav aria-label="Breadcrumb" className={cx('lg-breadcrumb', className)}>
+export const Breadcrumb: React.FC<{ items: BreadcrumbItem[]; separator?: React.ReactNode; className?: string }> = ({ items, separator = <ChevronRightIcon />, className }) => {
+  const t = useLocale();
+  return (
+  <nav aria-label={t.breadcrumb} className={cx('lg-breadcrumb', className)}>
     <ol>
       {items.map((it, i) => {
         const last = i === items.length - 1;
@@ -125,7 +129,8 @@ export const Breadcrumb: React.FC<{ items: BreadcrumbItem[]; separator?: React.R
       })}
     </ol>
   </nav>
-);
+  );
+};
 
 /* ───────── Pagination ───────── */
 export interface PaginationProps {
@@ -158,6 +163,7 @@ function pageRange(current: number, totalPages: number, sib: number): (number | 
 }
 
 export const Pagination: React.FC<PaginationProps> = ({ total, current, defaultCurrent = 1, pageSize = 10, onChange, siblingCount = 1, showTotal, simple, disabled, size = 'md', className }) => {
+  const t = useLocale();
   const [page, setPage] = useControlled(current, defaultCurrent);
   const pages = Math.max(1, Math.ceil(total / pageSize));
   const go = (p: number) => {
@@ -168,9 +174,9 @@ export const Pagination: React.FC<PaginationProps> = ({ total, current, defaultC
   };
   const start = total === 0 ? 0 : (page - 1) * pageSize + 1;
   return (
-    <nav aria-label="Pagination" className={cx('lg-pagination', `lg-pagination-${size}`, disabled && 'lg-disabled', className)}>
+    <nav aria-label={t.pagination} className={cx('lg-pagination', `lg-pagination-${size}`, disabled && 'lg-disabled', className)}>
       {showTotal && <span className="lg-pagination-total">{showTotal(total, [start, Math.min(total, page * pageSize)])}</span>}
-      <button type="button" className="lg-page-btn" aria-label="Previous page" disabled={page <= 1 || disabled} onClick={() => go(page - 1)}>
+      <button type="button" className="lg-page-btn" aria-label={t.prevPage} disabled={page <= 1 || disabled} onClick={() => go(page - 1)}>
         <ChevronLeftIcon />
       </button>
       {simple ? (
@@ -195,7 +201,7 @@ export const Pagination: React.FC<PaginationProps> = ({ total, current, defaultC
               key={`${p}-${i}`}
               type="button"
               className="lg-page-btn lg-page-jump"
-              aria-label={p === 'prev' ? 'Previous pages' : 'Next pages'}
+              aria-label={p === 'prev' ? t.prevPages : t.nextPages}
               disabled={disabled}
               onClick={() => go(p === 'prev' ? page - 5 : page + 5)}
             >
@@ -205,7 +211,7 @@ export const Pagination: React.FC<PaginationProps> = ({ total, current, defaultC
           ),
         )
       )}
-      <button type="button" className="lg-page-btn" aria-label="Next page" disabled={page >= pages || disabled} onClick={() => go(page + 1)}>
+      <button type="button" className="lg-page-btn" aria-label={t.nextPage} disabled={page >= pages || disabled} onClick={() => go(page + 1)}>
         <ChevronRightIcon />
       </button>
     </nav>

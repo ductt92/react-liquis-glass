@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { cx, useControlled, useId, type Size, normalizeText } from '../utils';
+import { useLocale } from './ConfigProvider';
 import { Popup } from './Popup';
 import { formatDate } from './DatePicker';
 import {
@@ -63,6 +64,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   className,
   style,
 }) => {
+  const t = useLocale();
   const [text, setText] = useControlled(value, defaultValue, onChange);
   const [open, setOpen] = React.useState(false);
   const [active, setActive] = React.useState(-1);
@@ -165,7 +167,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
           <button
             type="button"
             tabIndex={-1}
-            aria-label="Clear"
+            aria-label={t.clear}
             className="lg-input-clear"
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => {
@@ -233,7 +235,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   hourStep = 1,
   minuteStep = 1,
   secondStep = 1,
-  placeholder = 'Select time',
+  placeholder,
   size = 'md',
   disabled,
   allowClear = true,
@@ -241,6 +243,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
   className,
   style,
 }) => {
+  const t = useLocale();
   const [val, setVal] = useControlled<string | null>(value, defaultValue, onChange);
   const [open, setOpen] = React.useState(false);
   const withSeconds = format === 'HH:mm:ss';
@@ -276,10 +279,10 @@ export const TimePicker: React.FC<TimePickerProps> = ({
                 commit([n.getHours(), n.getMinutes(), n.getSeconds()]);
               }}
             >
-              Now
+              {t.now}
             </button>
             <button type="button" className="lg-picker-ok" onClick={() => commit(draft)}>
-              OK
+              {t.ok}
             </button>
           </div>
         </div>
@@ -293,12 +296,12 @@ export const TimePicker: React.FC<TimePickerProps> = ({
         style={style}
         onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), setOpen(true))}
       >
-        <span className={cx('lg-datepicker-value', !val && 'lg-select-placeholder')}>{val ?? placeholder}</span>
+        <span className={cx('lg-datepicker-value', !val && 'lg-select-placeholder')}>{val ?? placeholder ?? t.selectTime}</span>
         {allowClear && val && !disabled ? (
           <button
             type="button"
             tabIndex={-1}
-            aria-label="Clear"
+            aria-label={t.clear}
             className="lg-input-clear"
             onClick={(e) => {
               e.stopPropagation();
@@ -335,8 +338,6 @@ export interface RangePickerProps {
   style?: React.CSSProperties;
 }
 
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const WEEKDAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 const dayKey = (d: Date) => d.getFullYear() * 10000 + d.getMonth() * 100 + d.getDate();
 const startOfMonth = (d: Date) => new Date(d.getFullYear(), d.getMonth(), 1);
 
@@ -350,8 +351,9 @@ const MonthGrid: React.FC<{
   onPick: (d: Date) => void;
   onHover: (d: Date | null) => void;
 }> = ({ month, weekStartsOn, start, end, hover, disabledDate, onPick, onHover }) => {
+  const t = useLocale();
   const first = (month.getDay() - weekStartsOn + 7) % 7;
-  const days = weekStartsOn === 1 ? [...WEEKDAYS.slice(1), WEEKDAYS[0]] : WEEKDAYS;
+  const days = weekStartsOn === 1 ? [...t.weekdays.slice(1), t.weekdays[0]] : t.weekdays;
   const cells: Date[] = [];
   for (let i = 0; i < 42; i++) cells.push(new Date(month.getFullYear(), month.getMonth(), i - first + 1));
   const lo = start ? dayKey(start) : null;
@@ -400,7 +402,7 @@ export const RangePicker: React.FC<RangePickerProps> = ({
   defaultValue = [null, null],
   onChange,
   format = 'YYYY-MM-DD',
-  placeholder = ['Start date', 'End date'],
+  placeholder,
   disabledDate,
   presets,
   weekStartsOn = 1,
@@ -411,6 +413,7 @@ export const RangePicker: React.FC<RangePickerProps> = ({
   className,
   style,
 }) => {
+  const t = useLocale();
   const [val, setVal] = useControlled<DateRange>(value, defaultValue);
   const [open, setOpen] = React.useState(false);
   const [draftStart, setDraftStart] = React.useState<Date | null>(null);
@@ -474,19 +477,19 @@ export const RangePicker: React.FC<RangePickerProps> = ({
                 <div className="lg-calendar-header">
                   {i === 0 ? (
                     <>
-                      <button type="button" aria-label="Previous year" onClick={() => shift(-12)}><ChevronsLeftIcon /></button>
-                      <button type="button" aria-label="Previous month" onClick={() => shift(-1)}><ChevronLeftIcon /></button>
+                      <button type="button" aria-label={t.prevYear} onClick={() => shift(-12)}><ChevronsLeftIcon /></button>
+                      <button type="button" aria-label={t.prevMonth} onClick={() => shift(-1)}><ChevronLeftIcon /></button>
                     </>
                   ) : (
                     <span className="lg-range-spacer" />
                   )}
                   <span className="lg-calendar-title">
-                    {MONTHS[m.getMonth()]} {m.getFullYear()}
+                    {t.months[m.getMonth()]} {m.getFullYear()}
                   </span>
                   {i === 1 ? (
                     <>
-                      <button type="button" aria-label="Next month" onClick={() => shift(1)}><ChevronRightIcon /></button>
-                      <button type="button" aria-label="Next year" onClick={() => shift(12)}><ChevronsRightIcon /></button>
+                      <button type="button" aria-label={t.nextMonth} onClick={() => shift(1)}><ChevronRightIcon /></button>
+                      <button type="button" aria-label={t.nextYear} onClick={() => shift(12)}><ChevronsRightIcon /></button>
                     </>
                   ) : (
                     <span className="lg-range-spacer" />
@@ -516,14 +519,14 @@ export const RangePicker: React.FC<RangePickerProps> = ({
         style={style}
         onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), setOpen(true))}
       >
-        <span className={cx('lg-range-value', !val[0] && 'lg-select-placeholder')}>{val[0] ? formatDate(val[0], format) : placeholder[0]}</span>
+        <span className={cx('lg-range-value', !val[0] && 'lg-select-placeholder')}>{val[0] ? formatDate(val[0], format) : placeholder?.[0] ?? t.startDate}</span>
         <ArrowRightIcon className="lg-range-sep" />
-        <span className={cx('lg-range-value', !val[1] && 'lg-select-placeholder')}>{val[1] ? formatDate(val[1], format) : placeholder[1]}</span>
+        <span className={cx('lg-range-value', !val[1] && 'lg-select-placeholder')}>{val[1] ? formatDate(val[1], format) : placeholder?.[1] ?? t.endDate}</span>
         {allowClear && (val[0] || val[1]) && !disabled ? (
           <button
             type="button"
             tabIndex={-1}
-            aria-label="Clear"
+            aria-label={t.clear}
             className="lg-input-clear"
             onClick={(e) => {
               e.stopPropagation();
@@ -636,6 +639,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
   disabled,
   className,
 }) => {
+  const t = useLocale();
   const [hex, setHex] = useControlled(value, defaultValue, onChange);
   // Keep HSV locally so hue survives when saturation/value hit 0.
   const [hsva, setHsva] = React.useState<HSVA>(() => hexToHsva(hex));
@@ -693,7 +697,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
             onPointerDown={dragSV}
             role="slider"
             tabIndex={0}
-            aria-label="Saturation and brightness"
+            aria-label={t.saturation}
             aria-valuetext={`saturation ${Math.round(hsva.s * 100)}%, brightness ${Math.round(hsva.v * 100)}%`}
             onKeyDown={(e) => {
               if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') keyNudge(e.key, 's') && e.preventDefault();
@@ -709,7 +713,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
                 onPointerDown={dragHue}
                 role="slider"
                 tabIndex={0}
-                aria-label="Hue"
+                aria-label={t.hue}
                 aria-valuemin={0}
                 aria-valuemax={360}
                 aria-valuenow={Math.round(hsva.h)}
@@ -723,7 +727,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
                   onPointerDown={dragAlpha}
                   role="slider"
                   tabIndex={0}
-                  aria-label="Opacity"
+                  aria-label={t.opacity}
                   aria-valuemin={0}
                   aria-valuemax={100}
                   aria-valuenow={Math.round(hsva.a * 100)}
@@ -743,7 +747,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
                 className="lg-input-el"
                 value={text}
                 spellCheck={false}
-                aria-label="Hex color"
+                aria-label={t.hexColor}
                 onChange={(e) => setText(e.target.value)}
                 onBlur={() => {
                   if (isHex(text)) {

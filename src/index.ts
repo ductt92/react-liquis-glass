@@ -1,5 +1,7 @@
 // Theme
-export { ConfigProvider, Portal, LiquidGlassFilter, useConfig } from './components/ConfigProvider';
+export { ConfigProvider, Portal, LiquidGlassFilter, useConfig, useLocale } from './components/ConfigProvider';
+export { enUS, viVN } from './locale';
+export type { Locale } from './locale';
 export type { ConfigProviderProps, ThemeMode, ThemeTokens } from './components/ConfigProvider';
 export { Popup } from './components/Popup';
 export type { PopupProps, Placement, Trigger } from './components/Popup';

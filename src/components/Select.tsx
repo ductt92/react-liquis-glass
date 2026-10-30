@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { cx, useControlled, useId, type Size, normalizeText } from '../utils';
+import { useLocale } from './ConfigProvider';
 import { Popup } from './Popup';
 import { CheckIcon, ChevronDownIcon, CloseIcon, CloseCircleFilledIcon, SearchIcon } from '../icons';
 
@@ -52,7 +53,10 @@ const isGroup = <V,>(o: SelectOption<V> | SelectOptionGroup<V>): o is SelectOpti
 const textOf = (o: SelectOption<any>) => o.searchText ?? (typeof o.label === 'string' || typeof o.label === 'number' ? String(o.label) : String(o.value));
 
 function SelectImpl<V extends string | number = string>(props: SelectProps<V>) {
-  const { options, placeholder = 'Select…', size = 'md', disabled, allowClear, showSearch, status, notFoundContent = 'No options', className, style, prefix } = props;
+  const t = useLocale();
+  const { options, placeholder: placeholderProp, size = 'md', disabled, allowClear, showSearch, status, notFoundContent: notFoundProp, className, style, prefix } = props;
+  const placeholder = placeholderProp ?? t.select;
+  const notFoundContent = notFoundProp ?? t.noOptions;
   const multiple = props.multiple === true;
   const [value, setValue] = useControlled<any>(props.value, props.defaultValue ?? (multiple ? [] : null), props.onChange as any);
   const [open, setOpen] = useControlled<boolean>(props.open, false, props.onOpenChange);
@@ -150,7 +154,7 @@ function SelectImpl<V extends string | number = string>(props: SelectProps<V>) {
           <input
             ref={searchRef}
             value={query}
-            placeholder="Search…"
+            placeholder={t.search}
             aria-controls={listId}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -216,7 +220,7 @@ function SelectImpl<V extends string | number = string>(props: SelectProps<V>) {
                 <button
                   type="button"
                   tabIndex={-1}
-                  aria-label="Remove"
+                  aria-label={t.remove}
                   onClick={(e) => {
                     e.stopPropagation();
                     setValue(selected.filter((v) => v !== o.value));
@@ -234,7 +238,7 @@ function SelectImpl<V extends string | number = string>(props: SelectProps<V>) {
           <button
             type="button"
             tabIndex={-1}
-            aria-label="Clear"
+            aria-label={t.clear}
             className="lg-input-clear lg-select-clear"
             onClick={(e) => {
               e.stopPropagation();

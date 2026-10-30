@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
-import { globalConfig, ConfigProvider } from './ConfigProvider';
+import { globalConfig, ConfigProvider, useLocale } from './ConfigProvider';
 import { Modal, statusIcon } from './Feedback';
 import { QuestionCircleIcon } from '../icons';
 
@@ -34,6 +34,7 @@ const kindColor: Record<Kind, string> = {
 };
 
 const ConfirmDialog: React.FC<{ kind: Kind; options: ConfirmOptions; closing: boolean; onDone: () => void }> = ({ kind, options, closing, onDone }) => {
+  const t = useLocale();
   const [open, setOpen] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
   const close = () => {
@@ -71,8 +72,8 @@ const ConfirmDialog: React.FC<{ kind: Kind; options: ConfirmOptions; closing: bo
       maskClosable={options.maskClosable ?? false}
       width={options.width ?? 416}
       onOk={ok}
-      okText={options.okText ?? 'OK'}
-      cancelText={options.cancelText ?? 'Cancel'}
+      okText={options.okText ?? t.ok}
+      cancelText={options.cancelText ?? t.cancel}
       okLoading={loading}
       okDanger={options.okDanger}
       className="lg-confirm"
@@ -88,7 +89,7 @@ const ConfirmDialog: React.FC<{ kind: Kind; options: ConfirmOptions; closing: bo
       {!isConfirm && (
         <div className="lg-modal-footer lg-confirm-footer">
           <button type="button" className="lg-btn lg-btn-filled lg-btn-primary lg-btn-md lg-glass" onClick={ok} data-autofocus>
-            <span className="lg-btn-label">{options.okText ?? 'OK'}</span>
+            <span className="lg-btn-label">{options.okText ?? t.ok}</span>
           </button>
         </div>
       )}
@@ -114,9 +115,9 @@ function show(kind: Kind, initial: ConfirmOptions): ConfirmHandle {
   };
   const render = () => {
     if (destroyed) return;
-    const { theme, refraction, vars } = globalConfig.current;
+    const { theme, refraction, vars, locale } = globalConfig.current;
     root.render(
-      <ConfigProvider theme={theme} refraction={refraction} style={{ ...vars, display: 'contents' }}>
+      <ConfigProvider theme={theme} refraction={refraction} locale={locale} style={{ ...vars, display: 'contents' }}>
         <ConfirmDialog kind={kind} options={options} closing={closing} onDone={destroy} />
       </ConfigProvider>,
     );

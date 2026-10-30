@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../utils';
+import { enUS, type Locale } from '../locale';
 
 export type ThemeMode = 'light' | 'dark';
 
@@ -23,6 +24,8 @@ export interface ConfigProviderProps extends ThemeTokens {
   theme?: ThemeMode;
   /** Enables the SVG displacement "refraction" on glass surfaces (Chromium only). */
   refraction?: boolean;
+  /** Built-in labels, placeholders and aria-labels. Defaults to `enUS`; use `viVN` for Vietnamese. */
+  locale?: Locale;
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
@@ -32,15 +35,19 @@ interface ConfigContextValue {
   theme: ThemeMode;
   refraction: boolean;
   vars: React.CSSProperties;
+  locale: Locale;
 }
 
-const ConfigContext = React.createContext<ConfigContextValue>({ theme: 'light', refraction: false, vars: {} });
+const ConfigContext = React.createContext<ConfigContextValue>({ theme: 'light', refraction: false, vars: {}, locale: enUS });
 
 export const useConfig = () => React.useContext(ConfigContext);
 
+/** Strings for the active locale. */
+export const useLocale = () => React.useContext(ConfigContext).locale;
+
 /** Shared theme state so imperative APIs (message, notification) can follow the active provider. */
 export const globalConfig: { current: ConfigContextValue } = {
-  current: { theme: 'light', refraction: false, vars: {} },
+  current: { theme: 'light', refraction: false, vars: {}, locale: enUS },
 };
 
 function tokensToVars(t: ThemeTokens): React.CSSProperties {
@@ -78,6 +85,7 @@ export const LiquidGlassFilter: React.FC = () => (
 export const ConfigProvider: React.FC<ConfigProviderProps> = ({
   theme = 'light',
   refraction = false,
+  locale = enUS,
   className,
   style,
   children,
@@ -88,7 +96,7 @@ export const ConfigProvider: React.FC<ConfigProviderProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [tokens.accent, tokens.success, tokens.warning, tokens.danger, tokens.info, tokens.radius, tokens.blur, tokens.fontFamily],
   );
-  const value = React.useMemo(() => ({ theme, refraction, vars }), [theme, refraction, vars]);
+  const value = React.useMemo(() => ({ theme, refraction, vars, locale }), [theme, refraction, vars, locale]);
   React.useEffect(() => {
     globalConfig.current = value;
   }, [value]);
@@ -105,6 +113,11 @@ export const ConfigProvider: React.FC<ConfigProviderProps> = ({
     </ConfigContext.Provider>
   );
 };
+
+/** Re-provides the active config inside detached React roots (toasts, confirm dialogs). */
+export const ConfigBridge: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <ConfigContext.Provider value={globalConfig.current}>{children}</ConfigContext.Provider>
+);
 
 /** Renders children into document.body while keeping theme tokens. */
 export const Portal: React.FC<{ children: React.ReactNode; container?: HTMLElement | null }> = ({ children, container }) => {

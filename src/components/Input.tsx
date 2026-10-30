@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { cx, useControlled, mergeRefs, type Size } from '../utils';
+import { useLocale } from './ConfigProvider';
 import { CloseCircleFilledIcon, EyeIcon, EyeOffIcon, SearchIcon, PlusIcon, MinusIcon } from '../icons';
 
 type InputStatus = 'error' | 'warning';
@@ -44,6 +45,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Inp
   },
   ref,
 ) {
+  const t = useLocale();
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [value, setValue] = useControlled<string>(
     valueProp === undefined ? undefined : String(valueProp ?? ''),
@@ -94,7 +96,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(function Inp
         {...rest}
       />
       {allowClear && value && !disabled && (
-        <button type="button" tabIndex={-1} aria-label="Clear" className="lg-input-clear" onClick={clear}>
+        <button type="button" tabIndex={-1} aria-label={t.clear} className="lg-input-clear" onClick={clear}>
           <CloseCircleFilledIcon />
         </button>
       )}
@@ -124,6 +126,7 @@ export const Password = React.forwardRef<HTMLInputElement, PasswordProps>(functi
   { visibilityToggle = true, ...rest },
   ref,
 ) {
+  const t = useLocale();
   const [visible, setVisible] = React.useState(false);
   return (
     <Input
@@ -134,7 +137,7 @@ export const Password = React.forwardRef<HTMLInputElement, PasswordProps>(functi
           <button
             type="button"
             className="lg-input-action"
-            aria-label={visible ? 'Hide password' : 'Show password'}
+            aria-label={visible ? t.hidePassword : t.showPassword}
             onClick={() => setVisible((v) => !v)}
           >
             {visible ? <EyeOffIcon /> : <EyeIcon />}
@@ -240,6 +243,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
   { value: valueProp, defaultValue = null, onChange, min = -Infinity, max = Infinity, step = 1, precision, size = 'md', prefix, status, controls = true, disabled, className, style, ...rest },
   ref,
 ) {
+  const t = useLocale();
   const [value, setValue] = useControlled<number | null>(valueProp, defaultValue, onChange);
   const [draft, setDraft] = React.useState<string | null>(null);
   const clamp = (n: number) => {
@@ -288,10 +292,10 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       />
       {controls && (
         <span className="lg-input-number-controls">
-          <button type="button" tabIndex={-1} aria-label="Decrease" disabled={disabled || (value ?? 0) <= min} onClick={() => stepBy(-1)}>
+          <button type="button" tabIndex={-1} aria-label={t.decrease} disabled={disabled || (value ?? 0) <= min} onClick={() => stepBy(-1)}>
             <MinusIcon />
           </button>
-          <button type="button" tabIndex={-1} aria-label="Increase" disabled={disabled || (value ?? 0) >= max} onClick={() => stepBy(1)}>
+          <button type="button" tabIndex={-1} aria-label={t.increase} disabled={disabled || (value ?? 0) >= max} onClick={() => stepBy(1)}>
             <PlusIcon />
           </button>
         </span>
