@@ -1,6 +1,6 @@
 {
   "name": "react-liquis-glass",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Liquid Glass UI component library for React (TypeScript) with a built-in icon set — Material/Ant Design–style components with an Apple-like liquid glass look.",
   "license": "MIT",
   "type": "module",
@@ -23,7 +23,9 @@
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "CHANGELOG.md",
+    "README.vi.md"
   ],
   "sideEffects": [
     "**/*.css"
@@ -43,7 +45,8 @@
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run typecheck && npm run build",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build -o storybook-static"
+    "build-storybook": "storybook build -o storybook-static",
+    "deploy-storybook": "sh scripts/deploy-storybook.sh"
   },
   "peerDependencies": {
     "react": ">=18",
