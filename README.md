@@ -1,9 +1,9 @@
-# liquidglass-ui
+# react-liquis-glass
 
 A React + TypeScript component library with an Apple-style **liquid glass** look. It covers the components you'd expect from Material UI or Ant Design and ships with its own icon set.
 
 - About 80 components: buttons, forms, pickers, trees, data display, navigation, overlays, feedback and an app shell
-- 139 stroke icons in `liquidglass-ui/icons` (each one tree-shakeable)
+- 139 stroke icons in `react-liquis-glass/icons` (each one tree-shakeable)
 - Light and dark themes, plus design tokens through `ConfigProvider` (accent color, radius, blur, font)
 - Fully typed, ESM + CJS, `"use client"` ready for the Next.js App Router
 - Plain CSS with CSS variables, so there is no CSS-in-JS runtime
@@ -11,7 +11,7 @@ A React + TypeScript component library with an Apple-style **liquid glass** look
 ## Install
 
 ```bash
-npm install liquidglass-ui
+npm install react-liquis-glass
 ```
 
 Requires `react` and `react-dom` 18 or newer.
@@ -21,9 +21,9 @@ Requires `react` and `react-dom` 18 or newer.
 Import the stylesheet once, then wrap your app in `ConfigProvider`:
 
 ```tsx
-import 'liquidglass-ui/styles.css';
-import { ConfigProvider, Button, Card, message, viVN } from 'liquidglass-ui';
-import { SparklesIcon } from 'liquidglass-ui/icons';
+import 'react-liquis-glass/styles.css';
+import { ConfigProvider, Button, Card, message, viVN } from 'react-liquis-glass';
+import { SparklesIcon } from 'react-liquis-glass/icons';
 
 export default function App() {
   return (
@@ -85,7 +85,7 @@ Search in `Select`, `AutoComplete`, `TreeSelect`, `Cascader` and `Transfer` igno
 ## Icons
 
 ```tsx
-import { HomeIcon, SearchIcon, allIcons } from 'liquidglass-ui/icons';
+import { HomeIcon, SearchIcon, allIcons } from 'react-liquis-glass/icons';
 
 <HomeIcon size={24} strokeWidth={1.8} color="var(--lg-accent)" />
 <LoadingIcon spin />

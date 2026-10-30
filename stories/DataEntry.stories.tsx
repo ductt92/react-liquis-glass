@@ -3,8 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import {
   Button, Calendar, Card, Checkbox, CheckboxGroup, DatePicker, Flex, Form, FormItem, Input, InputNumber, Password, Radio, RadioGroup,
   Rate, SearchInput, Segmented, Select, Slider, Space, Switch, Text, TextArea, Upload, message,
-} from 'liquidglass-ui';
-import { MailIcon, UserIcon, GlobeIcon, ListIcon, GridIcon, DashboardIcon, HeartFilledIcon } from 'liquidglass-ui/icons';
+} from 'react-liquis-glass';
+import { MailIcon, UserIcon, GlobeIcon, ListIcon, GridIcon, DashboardIcon, HeartFilledIcon } from 'react-liquis-glass/icons';
 
 const meta: Meta = { title: 'Data Entry' };
 export default meta;

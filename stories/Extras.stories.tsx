@@ -1,9 +1,9 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button, Card, Flex, Paragraph, Space, Text, message } from 'liquidglass-ui';
-import { FloatButton, FloatButtonGroup, BackTop, Watermark, Kbd, Countdown, Anchor } from 'liquidglass-ui';
-import { confirm } from 'liquidglass-ui';
-import { MessageCircleIcon, QuestionCircleIcon, ShareIcon, EditIcon, BellIcon, SearchIcon } from 'liquidglass-ui/icons';
+import { Button, Card, Flex, Paragraph, Space, Text, message } from 'react-liquis-glass';
+import { FloatButton, FloatButtonGroup, BackTop, Watermark, Kbd, Countdown, Anchor } from 'react-liquis-glass';
+import { confirm } from 'react-liquis-glass';
+import { MessageCircleIcon, QuestionCircleIcon, ShareIcon, EditIcon, BellIcon, SearchIcon } from 'react-liquis-glass/icons';
 
 const meta: Meta = { title: 'Extras' };
 export default meta;
@@ -104,8 +104,8 @@ export const KbdCountdownCopy: StoryObj = {
         </Card>
         <Card title="Copyable text">
           <Flex vertical gap="sm">
-            <Text copyable>npm install liquidglass-ui</Text>
-            <Text code copyable={{ text: 'import { Button } from "liquidglass-ui";' }}>import Button</Text>
+            <Text copyable>npm install react-liquis-glass</Text>
+            <Text code copyable={{ text: 'import { Button } from "react-liquis-glass";' }}>import Button</Text>
             <Paragraph copyable={{ onCopy: () => message.success('Copied paragraph') }}>Copy this whole paragraph.</Paragraph>
           </Flex>
         </Card>

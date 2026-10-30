@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Avatar, Badge, Breadcrumb, Card, Flex, IconButton, Menu, SearchInput, Statistic, Text, Title } from 'liquidglass-ui';
-import { Layout, Header, Sider, Content, Footer, useSider } from 'liquidglass-ui';
-import { BellIcon, DashboardIcon, DropletIcon, FolderIcon, InboxIcon, SettingsIcon, UsersIcon, BarChartIcon } from 'liquidglass-ui/icons';
+import { Avatar, Badge, Breadcrumb, Card, Flex, IconButton, Menu, SearchInput, Statistic, Text, Title } from 'react-liquis-glass';
+import { Layout, Header, Sider, Content, Footer, useSider } from 'react-liquis-glass';
+import { BellIcon, DashboardIcon, DropletIcon, FolderIcon, InboxIcon, SettingsIcon, UsersIcon, BarChartIcon } from 'react-liquis-glass/icons';
 
 const meta: Meta = { title: 'App Shell', parameters: { layout: 'fullscreen' } };
 export default meta;

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Card, Flex, Text } from 'liquidglass-ui';
-import { AutoComplete, ColorPicker, RangePicker, TimePicker, type DateRange } from 'liquidglass-ui';
-import { SearchIcon } from 'liquidglass-ui/icons';
+import { Card, Flex, Text } from 'react-liquis-glass';
+import { AutoComplete, ColorPicker, RangePicker, TimePicker, type DateRange } from 'react-liquis-glass';
+import { SearchIcon } from 'react-liquis-glass/icons';
 
 const meta: Meta = { title: 'Pickers' };
 export default meta;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Card, Input, Text, message } from 'liquidglass-ui';
-import { allIcons, SearchIcon, type IconProps } from 'liquidglass-ui/icons';
+import { Card, Input, Text, message } from 'react-liquis-glass';
+import { allIcons, SearchIcon, type IconProps } from 'react-liquis-glass/icons';
 
 const meta: Meta<IconProps> = {
   title: 'Icons',
@@ -15,7 +15,7 @@ export const Gallery: StoryObj<IconProps> = {
     const [q, setQ] = React.useState('');
     const names = Object.keys(allIcons).filter((n) => n.toLowerCase().includes(q.toLowerCase()));
     return (
-      <Card title={`${Object.keys(allIcons).length} icons`} subtitle="import { HomeIcon } from 'liquidglass-ui/icons' — click to copy" extra={<Input prefix={<SearchIcon />} placeholder="Search icons" value={q} onValueChange={setQ} allowClear style={{ width: 220 }} />}>
+      <Card title={`${Object.keys(allIcons).length} icons`} subtitle="import { HomeIcon } from 'react-liquis-glass/icons' — click to copy" extra={<Input prefix={<SearchIcon />} placeholder="Search icons" value={q} onValueChange={setQ} allowClear style={{ width: 220 }} />}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: 8 }}>
           {names.map((n) => {
             const Icon = allIcons[n as keyof typeof allIcons];

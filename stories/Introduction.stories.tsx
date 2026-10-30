@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Avatar, Badge, Button, Card, Flex, IconButton, NavBar, Progress, Segmented, Slider, Space, Statistic, Switch, TabBar, Tag, Text, Title } from 'liquidglass-ui';
-import { BellIcon, DropletIcon, HeartIcon, HomeIcon, SearchIcon, SettingsIcon, SparklesIcon, UserIcon, MusicIcon, PlayIcon, PauseIcon } from 'liquidglass-ui/icons';
+import { Avatar, Badge, Button, Card, Flex, IconButton, NavBar, Progress, Segmented, Slider, Space, Statistic, Switch, TabBar, Tag, Text, Title } from 'react-liquis-glass';
+import { BellIcon, DropletIcon, HeartIcon, HomeIcon, SearchIcon, SettingsIcon, SparklesIcon, UserIcon, MusicIcon, PlayIcon, PauseIcon } from 'react-liquis-glass/icons';
 
 const meta: Meta = { title: 'Introduction' };
 export default meta;

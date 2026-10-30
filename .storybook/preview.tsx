@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { Preview } from '@storybook/react';
-import { ConfigProvider, enUS, viVN } from 'liquidglass-ui';
-import 'liquidglass-ui/styles.css';
+import { ConfigProvider, enUS, viVN } from 'react-liquis-glass';
+import 'react-liquis-glass/styles.css';
 import './preview.css';
 
 const preview: Preview = {

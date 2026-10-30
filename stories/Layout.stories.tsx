@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Avatar, Button, Card, Col, Divider, Flex, Row, Space, Text } from 'liquidglass-ui';
-import { HeartIcon, MessageCircleIcon, ShareIcon, MoreHorizontalIcon } from 'liquidglass-ui/icons';
+import { Avatar, Button, Card, Col, Divider, Flex, Row, Space, Text } from 'react-liquis-glass';
+import { HeartIcon, MessageCircleIcon, ShareIcon, MoreHorizontalIcon } from 'react-liquis-glass/icons';
 
 const meta: Meta = { title: 'Layout' };
 export default meta;

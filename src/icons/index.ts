@@ -1,4 +1,4 @@
-// Auto-generated icon set for liquidglass-ui. Every icon is a 24×24 stroke icon.
+// Auto-generated icon set for react-liquis-glass. Every icon is a 24×24 stroke icon.
 import { createIcon } from './createIcon';
 export { createIcon } from './createIcon';
 export type { IconProps, IconComponent } from './createIcon';

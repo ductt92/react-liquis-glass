@@ -9,9 +9,9 @@ const config: StorybookConfig = {
     cfg.resolve = cfg.resolve ?? {};
     cfg.resolve.alias = {
       ...(cfg.resolve.alias as Record<string, string>),
-      'liquidglass-ui/icons': path.resolve(__dirname, '../src/icons/index.ts'),
-      'liquidglass-ui/styles.css': path.resolve(__dirname, '../src/styles/index.css'),
-      'liquidglass-ui': path.resolve(__dirname, '../src/index.ts'),
+      'react-liquis-glass/icons': path.resolve(__dirname, '../src/icons/index.ts'),
+      'react-liquis-glass/styles.css': path.resolve(__dirname, '../src/styles/index.css'),
+      'react-liquis-glass': path.resolve(__dirname, '../src/index.ts'),
     };
     return cfg;
   },

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Avatar, Breadcrumb, Button, Card, Dropdown, Flex, IconButton, Menu, NavBar, Pagination, Steps, Switch, TabBar, Tabs, Text, message } from 'liquidglass-ui';
+import { Avatar, Breadcrumb, Button, Card, Dropdown, Flex, IconButton, Menu, NavBar, Pagination, Steps, Switch, TabBar, Tabs, Text, message } from 'react-liquis-glass';
 import {
   HomeIcon, FolderIcon, FileTextIcon, UserIcon, SettingsIcon, BarChartIcon, InboxIcon, MailIcon, StarIcon, TrashIcon,
   ChevronDownIcon, EditIcon, CopyIcon, ShareIcon, MoreVerticalIcon, SearchIcon, BellIcon, DropletIcon, MenuIcon, CameraIcon,
-} from 'liquidglass-ui/icons';
+} from 'react-liquis-glass/icons';
 
 const meta: Meta = { title: 'Navigation' };
 export default meta;

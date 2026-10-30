@@ -1,8 +1,8 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Card, Flex, Switch, Text } from 'liquidglass-ui';
-import { FileIcon, FileTextIcon, FolderIcon, ImageIcon } from 'liquidglass-ui/icons';
-import { Cascader, Transfer, Tree, TreeSelect, type CascaderOption, type TreeNode } from 'liquidglass-ui';
+import { Card, Flex, Switch, Text } from 'react-liquis-glass';
+import { FileIcon, FileTextIcon, FolderIcon, ImageIcon } from 'react-liquis-glass/icons';
+import { Cascader, Transfer, Tree, TreeSelect, type CascaderOption, type TreeNode } from 'react-liquis-glass';
 
 const meta: Meta = { title: 'Tree & Cascader' };
 export default meta;

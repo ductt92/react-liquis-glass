@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Button, ButtonGroup, Card, Divider, IconButton, Paragraph, Space, Text, Title } from 'liquidglass-ui';
-import { DownloadIcon, PlusIcon, HeartIcon, TrashIcon, ShareIcon, ChevronLeftIcon, ChevronRightIcon, SettingsIcon } from 'liquidglass-ui/icons';
+import { Button, ButtonGroup, Card, Divider, IconButton, Paragraph, Space, Text, Title } from 'react-liquis-glass';
+import { DownloadIcon, PlusIcon, HeartIcon, TrashIcon, ShareIcon, ChevronLeftIcon, ChevronRightIcon, SettingsIcon } from 'react-liquis-glass/icons';
 
 const meta: Meta<typeof Button> = {
   title: 'General',

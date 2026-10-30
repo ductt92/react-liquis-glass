@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Card, Flex, Segmented, Text } from 'liquidglass-ui';
-import { Carousel, Image, ImagePreviewGroup } from 'liquidglass-ui';
+import { Card, Flex, Segmented, Text } from 'react-liquis-glass';
+import { Carousel, Image, ImagePreviewGroup } from 'react-liquis-glass';
 
 const meta: Meta = { title: 'Media' };
 export default meta;

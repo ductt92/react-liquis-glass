@@ -2,8 +2,8 @@ import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import {
   Alert, Button, Card, Drawer, Flex, Input, Modal, Popconfirm, Popover, Result, Space, Text, Tooltip, message, notification, FormItem, Form,
-} from 'liquidglass-ui';
-import { InfoIcon } from 'liquidglass-ui/icons';
+} from 'react-liquis-glass';
+import { InfoIcon } from 'react-liquis-glass/icons';
 
 const meta: Meta = { title: 'Feedback' };
 export default meta;
@@ -93,7 +93,7 @@ export const Toasts: StoryObj = {
       </Space>
       <div className="sb-section-title">notification</div>
       <Space wrap>
-        <Button onClick={() => notification.success({ title: 'Deployment complete', description: 'liquidglass-ui v0.1.0 is live.' })}>Success</Button>
+        <Button onClick={() => notification.success({ title: 'Deployment complete', description: 'react-liquis-glass v0.1.1 is live.' })}>Success</Button>
         <Button onClick={() => notification.error({ title: 'Build failed', description: '3 tests failed in Table.test.tsx', btn: <Button size="sm" variant="tinted" color="danger">View logs</Button> })}>With action</Button>
         <Button onClick={() => notification.info({ title: 'New message', description: 'Anna: Love the new glass!', placement: 'bottomRight' })}>Bottom right</Button>
         <Button onClick={() => notification.warning({ title: 'Top left', placement: 'topLeft' })}>Top left</Button>

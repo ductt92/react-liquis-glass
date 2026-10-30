@@ -12,7 +12,7 @@
     "isolatedModules": true,
     "noUnusedLocals": true,
     "baseUrl": ".",
-    "paths": { "liquidglass-ui": ["src/index.ts"], "liquidglass-ui/icons": ["src/icons/index.ts"] }
+    "paths": { "react-liquis-glass": ["src/index.ts"], "react-liquis-glass/icons": ["src/icons/index.ts"] }
   },
   "include": ["src", ".storybook", "stories"]
 }

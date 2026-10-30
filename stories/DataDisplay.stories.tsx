@@ -3,8 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import {
   Avatar, AvatarGroup, Badge, Button, Card, Collapse, Descriptions, Empty, Flex, IconButton, List, ListItem, Progress, Skeleton, Space, Spin,
   Statistic, Switch, Table, Tag, Text, Timeline, Tooltip, type TableColumn,
-} from 'liquidglass-ui';
-import { BellIcon, CheckCircleIcon, ClockIcon, EditIcon, MailIcon, SettingsIcon, TrashIcon, WifiIcon, LockIcon, StarIcon } from 'liquidglass-ui/icons';
+} from 'react-liquis-glass';
+import { BellIcon, CheckCircleIcon, ClockIcon, EditIcon, MailIcon, SettingsIcon, TrashIcon, WifiIcon, LockIcon, StarIcon } from 'react-liquis-glass/icons';
 
 const meta: Meta = { title: 'Data Display' };
 export default meta;
