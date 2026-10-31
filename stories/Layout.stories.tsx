@@ -70,3 +70,23 @@ export const Cards: StoryObj = {
     </div>
   ),
 };
+
+export const CardBareAndAs: StoryObj = {
+  name: 'Card: bare and as',
+  render: () => (
+    <div className="sb-grid">
+      <Card as="section" bare aria-label="Stats" style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: 20 }}>
+        <Text type="secondary">
+          <code>bare</code> drops the body wrapper and its padding, so the card's own flex layout and gap apply to its children.
+          <code> as="section"</code> sets the root element.
+        </Text>
+        <Text strong>1,284 visitors</Text>
+        <Text type="secondary">+12% this week</Text>
+      </Card>
+      <Card as="form" bare style={{ display: 'grid', gap: 10, padding: 20 }} onSubmit={(e: React.FormEvent) => e.preventDefault()}>
+        <Text strong>A form that is a card</Text>
+        <Button type="submit" variant="filled" color="primary">Save</Button>
+      </Card>
+    </div>
+  ),
+};

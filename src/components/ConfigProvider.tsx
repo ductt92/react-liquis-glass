@@ -26,6 +26,11 @@ export interface ConfigProviderProps extends ThemeTokens {
   refraction?: boolean;
   /** Built-in labels, placeholders and aria-labels. Defaults to `enUS`; use `viVN` for Vietnamese. */
   locale?: Locale;
+  /**
+   * Where portalled layers (Select, Dropdown, Tooltip, Modal…) are mounted. Defaults to the
+   * element in fullscreen while there is one, otherwise `document.body`.
+   */
+  getPopupContainer?: () => HTMLElement;
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
@@ -36,6 +41,7 @@ interface ConfigContextValue {
   refraction: boolean;
   vars: React.CSSProperties;
   locale: Locale;
+  getPopupContainer?: () => HTMLElement;
 }
 
 const ConfigContext = React.createContext<ConfigContextValue>({ theme: 'light', refraction: false, vars: {}, locale: enUS });
@@ -86,6 +92,7 @@ export const ConfigProvider: React.FC<ConfigProviderProps> = ({
   theme = 'light',
   refraction = false,
   locale = enUS,
+  getPopupContainer,
   className,
   style,
   children,
@@ -96,7 +103,7 @@ export const ConfigProvider: React.FC<ConfigProviderProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [tokens.accent, tokens.success, tokens.warning, tokens.danger, tokens.info, tokens.radius, tokens.blur, tokens.fontFamily],
   );
-  const value = React.useMemo(() => ({ theme, refraction, vars, locale }), [theme, refraction, vars, locale]);
+  const value = React.useMemo(() => ({ theme, refraction, vars, locale, getPopupContainer }), [theme, refraction, vars, locale, getPopupContainer]);
   React.useEffect(() => {
     globalConfig.current = value;
   }, [value]);
@@ -119,9 +126,18 @@ export const ConfigBridge: React.FC<{ children: React.ReactNode }> = ({ children
   <ConfigContext.Provider value={globalConfig.current}>{children}</ConfigContext.Provider>
 );
 
-/** Renders children into document.body while keeping theme tokens. */
+/**
+ * Default mount point for portalled layers: the element in fullscreen while there is one
+ * (everything outside it is hidden), unless it can't hold children (video, iframe…), else body.
+ */
+function defaultContainer(): HTMLElement {
+  const fs = document.fullscreenElement;
+  return fs instanceof HTMLElement && !/^(VIDEO|IFRAME|IMG|CANVAS|OBJECT|EMBED)$/.test(fs.tagName) ? fs : document.body;
+}
+
+/** Renders children into a container (see `getPopupContainer`) while keeping theme tokens. */
 export const Portal: React.FC<{ children: React.ReactNode; container?: HTMLElement | null }> = ({ children, container }) => {
-  const { theme, refraction, vars } = useConfig();
+  const { theme, refraction, vars, getPopupContainer } = useConfig();
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
   if (!mounted) return null;
@@ -129,6 +145,6 @@ export const Portal: React.FC<{ children: React.ReactNode; container?: HTMLEleme
     <div className={cx('lg-root lg-portal', refraction && 'lg-refraction')} data-lg-theme={theme} style={vars}>
       {children}
     </div>,
-    container ?? document.body,
+    container ?? getPopupContainer?.() ?? defaultContainer(),
   );
 };

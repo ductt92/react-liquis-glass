@@ -75,7 +75,7 @@ export const ProgressAndStats: StoryObj = {
     <div className="sb-grid">
       <Card title="Line progress">
         <Flex vertical gap="md">
-          <Progress percent={30} />
+          <Progress percent={30} aria-label="Upload progress" />
           <Progress percent={55} status="active" />
           <Progress percent={100} />
           <Progress percent={70} status="exception" />

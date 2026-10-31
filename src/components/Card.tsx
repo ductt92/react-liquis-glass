@@ -14,26 +14,38 @@ export interface CardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 't
   /** `glass` (default), `strong` (more opaque), `plain` (no glass). */
   variant?: 'glass' | 'strong' | 'plain';
   bodyStyle?: React.CSSProperties;
+  /** Root element, e.g. `section`, `article`, `form` or `li`. Default `div`. */
+  as?: React.ElementType;
+  /**
+   * Render children straight inside the card, with no `.lg-card-body` wrapper or its padding,
+   * so layout classes and styles on the card (flex, grid, gap) apply to them. Title, cover and
+   * actions are ignored.
+   */
+  bare?: boolean;
 }
 
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
-  { title, subtitle, extra, cover, actions, hoverable, loading, size = 'md', variant = 'glass', bodyStyle, className, children, ...rest },
+  { title, subtitle, extra, cover, actions, hoverable, loading, size = 'md', variant = 'glass', bodyStyle, as: Root = 'div', bare, className, children, ...rest },
   ref,
 ) {
+  const classes = cx(
+    'lg-card',
+    `lg-card-${size}`,
+    variant !== 'plain' && 'lg-glass',
+    variant === 'strong' && 'lg-glass-strong',
+    variant === 'plain' && 'lg-card-plain',
+    hoverable && 'lg-card-hoverable',
+    bare && 'lg-card-bare',
+    className,
+  );
+  if (bare)
+    return (
+      <Root ref={ref} className={classes} {...rest}>
+        {loading ? <Skeleton active paragraph={{ rows: 3 }} /> : children}
+      </Root>
+    );
   return (
-    <div
-      ref={ref}
-      className={cx(
-        'lg-card',
-        `lg-card-${size}`,
-        variant !== 'plain' && 'lg-glass',
-        variant === 'strong' && 'lg-glass-strong',
-        variant === 'plain' && 'lg-card-plain',
-        hoverable && 'lg-card-hoverable',
-        className,
-      )}
-      {...rest}
-    >
+    <Root ref={ref} className={classes} {...rest}>
       {cover && <div className="lg-card-cover">{cover}</div>}
       {(title || extra) && (
         <div className="lg-card-head">
@@ -54,6 +66,6 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
           ))}
         </ul>
       )}
-    </div>
+    </Root>
   );
 });

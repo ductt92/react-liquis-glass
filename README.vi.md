@@ -79,8 +79,8 @@ Tìm kiếm trong `Select`, `AutoComplete`, `TreeSelect`, `Cascader`, `Transfer`
 
 | Nhóm | Component |
 | --- | --- |
-| Cơ bản | `Button`, `IconButton`, `ButtonGroup`, `Typography` (`Title`, `Text`, `Paragraph`, có nút copy) |
-| Bố cục | `Layout` (`Header`, `Sider` thu gọn được, `Content`, `Footer`), `Space`, `Flex`, `Row`/`Col` (lưới 24 cột), `Card`, `Divider` |
+| Cơ bản | `Button`, `IconButton` (có `as` để thành `Link` của router), `ButtonGroup`, `Typography` (`Title`, `Text`, `Paragraph`, có nút copy) |
+| Bố cục | `Layout` (`Header`, `Sider` thu gọn được, `Content`, `Footer`), `Space`, `Flex`, `Row`/`Col` (lưới 24 cột), `Card` (có `as` và `bare` để tự bố cục nội dung), `Divider` |
 | Nhập liệu | `Input`, `Password`, `SearchInput`, `TextArea`, `InputNumber`, `Select`, `AutoComplete`, `Checkbox`, `Radio`, `Switch`, `Slider`, `Rate`, `Segmented`, `DatePicker`, `RangePicker`, `TimePicker`, `Calendar`, `ColorPicker`, `Cascader`, `TreeSelect`, `Transfer`, `Upload`, `Form`/`FormItem` |
 | Hiển thị | `Table`, `List`, `Tree`, `Collapse`, `Avatar`, `Badge`, `Tag`, `Progress`, `Statistic`, `Countdown`, `Timeline`, `Descriptions`, `Carousel`, `Image` (xem phóng to), `Skeleton`, `Spin`, `Empty`, `Kbd`, `Watermark` |
 | Điều hướng | `Tabs`, `Menu`, `Dropdown`, `Breadcrumb`, `Pagination`, `Steps`, `Anchor`, `NavBar`, `TabBar` (thanh tab kiểu iOS), `FloatButton`, `BackTop` |

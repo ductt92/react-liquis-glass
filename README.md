@@ -165,6 +165,7 @@ Import the CSS in `_app.tsx` (or `root.tsx`) and wrap the page in `ConfigProvide
 | `fontFamily` | `string` | system UI stack | Font for every component |
 | `locale` | `Locale` | `enUS` | Built-in labels, placeholders and aria-labels |
 | `refraction` | `boolean` | `false` | SVG displacement refraction (Chromium only, see [Browser support](#browser-support)) |
+| `getPopupContainer` | `() => HTMLElement` | fullscreen element, else `document.body` | Where Select, Dropdown, Tooltip, Modal and other layers mount |
 
 You can nest providers to theme part of the page differently:
 
@@ -176,6 +177,10 @@ You can nest providers to theme part of the page differently:
   </ConfigProvider>
 </ConfigProvider>
 ```
+
+### Where popups mount
+
+Select, Dropdown, Tooltip, Popover, DatePicker, Modal and Drawer render in a portal. By default it is `document.body`, or the element in fullscreen while there is one, so a dropdown inside a fullscreen video player stays visible. Change it for the whole app with `ConfigProvider`'s `getPopupContainer`, or for one `Select` with its own `getPopupContainer(trigger)`. Popups are `position: fixed`, so pick a container without `transform`, `filter` or `backdrop-filter` unless it fills the viewport.
 
 ### CSS variables
 
@@ -250,8 +255,8 @@ Every component is exported from `react-liquis-glass`. Props are fully typed, an
 
 | Component | Highlights |
 | --- | --- |
-| `Button` | `variant`: `glass` · `filled` · `tinted` · `outline` · `text` · `link`; `color`: `primary` · `success` · `warning` · `danger` · `info` · `default`; `size`, `shape` (`round` / `circle`), `icon`, `iconPosition`, `loading`, `block`, `href` |
-| `IconButton` | Circular icon-only button (`aria-label` required) |
+| `Button` | `variant`: `glass` · `filled` · `tinted` · `outline` · `text` · `link`; `color`: `primary` · `success` · `warning` · `danger` · `info` · `default`; `size`, `shape` (`round` / `circle`), `icon`, `iconPosition`, `loading`, `block`, `href`, `as` (render as another component, e.g. a router `Link`) |
+| `IconButton` | Circular icon-only button (`aria-label` required). Also takes `as` |
 | `ButtonGroup` | Joins buttons into a segmented row |
 | `Typography` (`Title`, `Text`, `Paragraph`) | `level`, `type` (`secondary`, `success`, `danger`…), `strong`, `code`, `mark`, `ellipsis` (`true` or line count), `copyable` |
 
@@ -259,6 +264,7 @@ Every component is exported from `react-liquis-glass`. Props are fully typed, an
 <Button variant="filled" color="primary" icon={<PlusIcon />}>New</Button>
 <Button variant="tinted" color="danger" loading>Deleting</Button>
 <IconButton aria-label="Settings" icon={<SettingsIcon />} />
+<Button as={Link} to="/settings" icon={<SettingsIcon />}>Settings</Button> {/* React Router, Next.js… */}
 <Text copyable>npm i react-liquis-glass</Text>
 <Paragraph ellipsis={2}>Long text clamped to two lines…</Paragraph>
 ```
@@ -271,7 +277,7 @@ Every component is exported from `react-liquis-glass`. Props are fully typed, an
 | `Space` | Inline spacing with `size`, `direction`, `wrap`, `split` |
 | `Flex` | Flexbox helper: `vertical`, `gap`, `justify`, `align`, `wrap` |
 | `Row` / `Col` | 24-column grid with `gutter`, `span`, `offset` and responsive `xs` `sm` `md` `lg` `xl` |
-| `Card` | `title`, `subtitle`, `extra`, `cover`, `actions`, `hoverable`, `loading`, `variant` (`glass` / `strong` / `plain`) |
+| `Card` | `title`, `subtitle`, `extra`, `cover`, `actions`, `hoverable`, `loading`, `variant` (`glass` / `strong` / `plain`). `as` sets the root element (`section`, `form`…). `bare` drops the body wrapper and its padding so your own layout (`display: flex`, `gap`) applies to the children |
 | `Divider` | Horizontal or vertical, with optional text and `orientation` |
 
 ```tsx
@@ -297,14 +303,14 @@ Every component is exported from `react-liquis-glass`. Props are fully typed, an
 | --- | --- |
 | `Input` | `prefix`, `suffix`, `addonBefore`/`addonAfter`, `allowClear`, `showCount`, `status`, `variant` (`glass` / `filled` / `outline`), `onValueChange` |
 | `Password`, `SearchInput`, `TextArea`, `InputNumber` | Password has a show/hide toggle. `SearchInput` takes `onSearch`. `TextArea` has `autoSize`. `InputNumber` has `min`/`max`/`step`/`precision` and steppers |
-| `Select` | Single or `multiple`, `showSearch`, option groups, `allowClear`, `maxTagCount`, full keyboard navigation. Generic over the value type |
+| `Select` | Single or `multiple`, `showSearch`, option groups, `allowClear`, `maxTagCount`, full keyboard navigation, `getPopupContainer`. Generic over the value type |
 | `AutoComplete` | Suggestions while typing, either static `options` or async `onSearch` |
 | `Checkbox`, `CheckboxGroup` | `indeterminate`, `options`, `direction` |
 | `Radio`, `RadioGroup` | `optionType="button"` for a glass segmented look |
 | `Switch` | iOS-style, with `size`, `loading`, `checkedChildren` |
 | `Slider` | Single or `range`, `marks`, `step`, tooltip bubble |
 | `Rate` | `allowHalf`, custom `character` |
-| `Segmented` | Sliding glass thumb with icons and `block` |
+| `Segmented` | Sliding glass thumb with icons and `block`. Labels can be any node; items grow to fit two-line labels. Takes `aria-label` |
 | `DatePicker`, `Calendar` | `format`, `disabledDate`, `weekStartsOn` |
 | `RangePicker` | Two-month panel with hover preview and `presets` |
 | `TimePicker` | Scrolling columns. `format` is `'HH:mm'` or `'HH:mm:ss'`, with `minuteStep` and a Now button |
@@ -351,7 +357,7 @@ const [city, setCity] = useState<string | null>(null);
 | `Avatar`, `AvatarGroup` | Image, initials (auto color) or icon, with `status` dot and `max` overflow |
 | `Badge` | Count, dot or `status` with ripple |
 | `Tag` | Tinted, filled, outline or glass. `closable`, or checkable via `checked` |
-| `Progress` | Line, circle or dashboard; gradient `strokeColor`, `steps` |
+| `Progress` | Line, circle or dashboard; gradient `strokeColor`, `steps`, `aria-label` |
 | `Statistic`, `Countdown` | Big numbers with trend arrows. `Countdown` counts down to `value` with `format` and `onFinish` |
 | `Timeline`, `Descriptions` | Event lists and key/value grids |
 | `Carousel` | Swipe, autoplay, `effect: 'slide' \| 'fade'`, glass dots and arrows |
@@ -378,7 +384,7 @@ type User = { id: number; name: string; role: string };
 
 | Component | Highlights |
 | --- | --- |
-| `Tabs` | `variant`: `line` · `pill` · `card`; sliding indicator, closable tabs, `tabBarExtra` |
+| `Tabs` | `variant`: `line` · `pill` · `card`; sliding indicator, closable tabs, `tabBarExtra`, `aria-label` |
 | `Menu` | Vertical or horizontal, groups, dividers, sub-menus, `collapsed` icon rail |
 | `Dropdown` | Menu in a glass popover with keyboard navigation and danger items |
 | `Breadcrumb`, `Pagination`, `Steps` | The usual, in glass |
@@ -483,7 +489,8 @@ import type { IconProps, IconName } from 'react-liquis-glass/icons';
 - Keyboard support: arrow keys in Select, Menu, Dropdown, Tabs, Tree, Slider and InputNumber; Enter / Space to activate; Esc to close overlays.
 - Modal and Drawer trap focus and return it to the trigger when they close.
 - Visible `:focus-visible` rings in the accent color.
-- aria-labels come from the active `locale`.
+- aria-labels come from the active `locale`. `Progress`, `Tabs` and `Segmented` take your own `aria-label` / `aria-labelledby`.
+- `Button` with `as` or `href` and `disabled` can't be clicked or reached with Tab.
 
 ## Browser support
 

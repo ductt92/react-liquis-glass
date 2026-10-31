@@ -13,14 +13,19 @@ export interface ProgressProps {
   strokeColor?: string | [string, string];
   steps?: number;
   className?: string;
+  style?: React.CSSProperties;
+  /** Accessible name, e.g. "Upload progress". */
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
 }
 
 const statusColor = (s?: ProgressProps['status']) =>
   s === 'success' ? 'var(--lg-success)' : s === 'exception' ? 'var(--lg-danger)' : 'var(--lg-accent)';
 
-export const Progress: React.FC<ProgressProps> = ({ percent, type = 'line', status: statusProp, size = 'md', showInfo = true, format, strokeColor, steps, className }) => {
+export const Progress: React.FC<ProgressProps> = ({ percent, type = 'line', status: statusProp, size = 'md', showInfo = true, format, strokeColor, steps, className, style, 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledby }) => {
   const gradId = useId('lg-grad');
   const p = Math.max(0, Math.min(100, percent));
+  const a11y = { role: 'progressbar', 'aria-valuenow': p, 'aria-valuemin': 0, 'aria-valuemax': 100, 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledby } as const;
   const status = statusProp ?? (p >= 100 ? 'success' : 'normal');
   const color = Array.isArray(strokeColor)
     ? `linear-gradient(90deg, ${strokeColor[0]}, ${strokeColor[1]})`
@@ -32,7 +37,7 @@ export const Progress: React.FC<ProgressProps> = ({ percent, type = 'line', stat
   if (type === 'line') {
     const h = typeof size === 'number' ? size : size === 'sm' ? 6 : size === 'lg' ? 12 : 8;
     return (
-      <div className={cx('lg-progress lg-progress-line', `lg-progress-${status}`, className)} role="progressbar" aria-valuenow={p} aria-valuemin={0} aria-valuemax={100}>
+      <div className={cx('lg-progress lg-progress-line', `lg-progress-${status}`, className)} style={style} {...a11y}>
         {steps ? (
           <div className="lg-progress-steps">
             {Array.from({ length: steps }, (_, i) => (
@@ -58,7 +63,7 @@ export const Progress: React.FC<ProgressProps> = ({ percent, type = 'line', stat
   const solid = Array.isArray(strokeColor) ? `url(#${gradId})` : strokeColor ?? statusColor(status);
   const rotate = type === 'dashboard' ? 135 : -90;
   return (
-    <div className={cx('lg-progress lg-progress-circle', `lg-progress-${status}`, className)} style={{ width: px, height: px }} role="progressbar" aria-valuenow={p} aria-valuemin={0} aria-valuemax={100}>
+    <div className={cx('lg-progress lg-progress-circle', `lg-progress-${status}`, className)} style={{ width: px, height: px, ...style }} {...a11y}>
       <svg width={px} height={px} viewBox={`0 0 ${px} ${px}`} style={{ transform: `rotate(${rotate}deg)` }}>
         {Array.isArray(strokeColor) && (
           <defs>

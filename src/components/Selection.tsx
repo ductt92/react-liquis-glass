@@ -410,10 +410,13 @@ export interface SegmentedProps<V = string | number> {
   block?: boolean;
   disabled?: boolean;
   className?: string;
+  /** Accessible name for the group. */
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
 }
 
 /** iOS-style segmented control with a sliding glass thumb. */
-export function Segmented<V extends string | number = string>({ options, value, defaultValue, onChange, size = 'md', block, disabled, className }: SegmentedProps<V>) {
+export function Segmented<V extends string | number = string>({ options, value, defaultValue, onChange, size = 'md', block, disabled, className, 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledby }: SegmentedProps<V>) {
   const opts = options.map((o) => normalize(o as OptionItem) as OptionItem<V>);
   const [val, setVal] = useControlled<V>(value, defaultValue ?? opts[0]?.value, onChange);
   const refs = React.useRef<(HTMLButtonElement | null)[]>([]);
@@ -424,7 +427,7 @@ export function Segmented<V extends string | number = string>({ options, value, 
     if (el) setThumb({ left: el.offsetLeft, width: el.offsetWidth });
   }, [idx, opts.length, size, block]);
   return (
-    <div role="tablist" className={cx('lg-segmented lg-glass', `lg-segmented-${size}`, block && 'lg-segmented-block', disabled && 'lg-disabled', className)}>
+    <div role="tablist" aria-label={ariaLabel} aria-labelledby={ariaLabelledby} className={cx('lg-segmented lg-glass', `lg-segmented-${size}`, block && 'lg-segmented-block', disabled && 'lg-disabled', className)}>
       {thumb && <span className="lg-segmented-thumb" style={{ transform: `translateX(${thumb.left}px)`, width: thumb.width }} />}
       {opts.map((o, i) => (
         <button

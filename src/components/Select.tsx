@@ -32,6 +32,8 @@ interface SelectBaseProps<V> {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   prefix?: React.ReactNode;
+  /** Where to mount the dropdown. Overrides `ConfigProvider`'s `getPopupContainer`. */
+  getPopupContainer?: (trigger: HTMLElement) => HTMLElement;
 }
 
 export interface SingleSelectProps<V> extends SelectBaseProps<V> {
@@ -54,7 +56,7 @@ const textOf = (o: SelectOption<any>) => o.searchText ?? (typeof o.label === 'st
 
 function SelectImpl<V extends string | number = string>(props: SelectProps<V>) {
   const t = useLocale();
-  const { options, placeholder: placeholderProp, size = 'md', disabled, allowClear, showSearch, status, notFoundContent: notFoundProp, className, style, prefix } = props;
+  const { options, placeholder: placeholderProp, size = 'md', disabled, allowClear, showSearch, status, notFoundContent: notFoundProp, className, style, prefix, getPopupContainer } = props;
   const placeholder = placeholderProp ?? t.select;
   const notFoundContent = notFoundProp ?? t.noOptions;
   const multiple = props.multiple === true;
@@ -184,7 +186,7 @@ function SelectImpl<V extends string | number = string>(props: SelectProps<V>) {
   const shownTags = maxTag != null ? selectedOptions.slice(0, maxTag) : selectedOptions;
 
   return (
-    <Popup content={dropdown} open={open && !disabled} onOpenChange={setOpen} trigger="click" placement="bottomLeft" matchWidth offset={6} role="presentation">
+    <Popup content={dropdown} open={open && !disabled} onOpenChange={setOpen} trigger="click" placement="bottomLeft" matchWidth offset={6} role="presentation" getPopupContainer={getPopupContainer}>
       <div
         role="combobox"
         tabIndex={disabled ? -1 : 0}

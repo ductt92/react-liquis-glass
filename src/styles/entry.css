@@ -189,11 +189,11 @@
 .lg-root[data-lg-theme='dark'] .lg-segmented-thumb, .lg-root[data-lg-theme='dark'] .lg-radio-button.lg-checked { background: rgba(255,255,255,.18); }
 .lg-segmented-item {
   position: relative; z-index: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  height: 32px; padding: 0 16px; border: 0; background: none; border-radius: var(--lg-radius-pill);
+  min-height: 32px; padding: 4px 16px; border: 0; background: none; border-radius: var(--lg-radius-pill);
   color: var(--lg-text-2); font: inherit; font-weight: 560; cursor: pointer; white-space: nowrap; transition: color .2s;
 }
-.lg-segmented-sm .lg-segmented-item { height: 26px; padding: 0 12px; font-size: 13px; }
-.lg-segmented-lg .lg-segmented-item { height: 40px; padding: 0 22px; font-size: 15px; }
+.lg-segmented-sm .lg-segmented-item { min-height: 26px; padding: 3px 12px; font-size: 13px; }
+.lg-segmented-lg .lg-segmented-item { min-height: 40px; padding: 6px 22px; font-size: 15px; }
 .lg-segmented-item:hover:not(:disabled), .lg-segmented-item.lg-active { color: var(--lg-text); }
 .lg-segmented-item:disabled { opacity: .4; cursor: not-allowed; }
 

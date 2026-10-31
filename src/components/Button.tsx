@@ -4,7 +4,7 @@ import { LoadingIcon } from '../icons';
 
 export type ButtonVariant = 'glass' | 'filled' | 'tinted' | 'outline' | 'text' | 'link';
 
-export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'color'> {
+interface ButtonOwnProps {
   variant?: ButtonVariant;
   color?: ColorName;
   size?: Size;
@@ -13,12 +13,25 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   iconPosition?: 'start' | 'end';
   loading?: boolean;
   block?: boolean;
+  disabled?: boolean;
   /** Render as an anchor. */
   href?: string;
   target?: string;
+  /**
+   * Render as another element or component, e.g. a router link:
+   * `<Button as={Link} to="/settings">`. Extra props go to that component.
+   */
+  as?: React.ElementType;
 }
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+export type ButtonProps<C extends React.ElementType = 'button'> = ButtonOwnProps &
+  Omit<React.ComponentPropsWithoutRef<C>, keyof ButtonOwnProps | 'color'>;
+
+type ButtonComponent = (<C extends React.ElementType = 'button'>(
+  props: ButtonProps<C> & { as?: C; ref?: React.Ref<any> },
+) => React.ReactElement | null) & { displayName?: string };
+
+export const Button = React.forwardRef(function Button(
   {
     variant = 'glass',
     color = 'default',
@@ -33,10 +46,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
     children,
     href,
     target,
+    as,
     type = 'button',
     ...rest
-  },
-  ref,
+  }: ButtonProps<React.ElementType>,
+  ref: React.Ref<any>,
 ) {
   const iconOnly = !children && (icon || loading);
   const iconNode = loading ? <LoadingIcon spin /> : icon;
@@ -59,34 +73,49 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       {iconNode && iconPosition === 'end' && <span className="lg-btn-icon">{iconNode}</span>}
     </>
   );
-  if (href)
+  if ((as && as !== 'button') || href) {
+    const Comp = as ?? 'a';
+    // links can't be disabled natively: drop href, block the click and take it out of the tab order
+    const off = disabled || loading;
+    const onClick = (e: React.MouseEvent) => {
+      if (off) e.preventDefault();
+      else rest.onClick?.(e);
+    };
     return (
-      <a
+      <Comp
+        ref={ref}
         className={classes}
-        href={disabled ? undefined : href}
-        target={target}
-        aria-disabled={disabled}
-        {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+        {...(href !== undefined && !off && { href })}
+        {...(target !== undefined && { target })}
+        {...rest}
+        aria-disabled={off || undefined}
+        tabIndex={off ? -1 : rest.tabIndex}
+        onClick={onClick}
       >
         {content}
-      </a>
+      </Comp>
     );
+  }
   return (
     <button ref={ref} type={type} className={classes} disabled={disabled || loading} {...rest}>
       {content}
     </button>
   );
-});
+}) as ButtonComponent;
+Button.displayName = 'Button';
 
-export interface IconButtonProps extends Omit<ButtonProps, 'children' | 'icon'> {
+export type IconButtonProps<C extends React.ElementType = 'button'> = Omit<ButtonProps<C>, 'children' | 'icon'> & {
   icon: React.ReactNode;
   'aria-label': string;
-}
+};
 
 /** Circle button with a single icon. */
-export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(props, ref) {
+export const IconButton = React.forwardRef<any, any>(function IconButton(props, ref) {
   return <Button ref={ref} shape="circle" {...props} />;
-});
+}) as (<C extends React.ElementType = 'button'>(props: IconButtonProps<C> & { as?: C; ref?: React.Ref<any> }) => React.ReactElement | null) & {
+  displayName?: string;
+};
+IconButton.displayName = 'IconButton';
 
 export interface ButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {}
 export const ButtonGroup: React.FC<ButtonGroupProps> = ({ className, ...rest }) => (

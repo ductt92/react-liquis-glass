@@ -1,6 +1,6 @@
 {
   "name": "react-liquis-glass",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Liquid Glass UI component library for React (TypeScript) with a built-in icon set — Material/Ant Design–style components with an Apple-like liquid glass look.",
   "license": "MIT",
   "type": "module",

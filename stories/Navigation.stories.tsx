@@ -20,7 +20,7 @@ export const TabsStory: StoryObj = {
     ];
     return (
       <Flex vertical gap="lg">
-        <Card title="Line"><Tabs items={items} /></Card>
+        <Card title="Line"><Tabs aria-label="Dashboard sections" items={items} /></Card>
         <Card title="Pill"><Tabs variant="pill" items={items} /></Card>
         <Card title="Card + extra"><Tabs variant="card" size="sm" items={items} tabBarExtra={<Button size="sm" variant="text">+ Add</Button>} /></Card>
       </Flex>

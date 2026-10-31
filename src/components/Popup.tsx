@@ -55,6 +55,8 @@ export interface PopupProps {
   style?: React.CSSProperties;
   arrow?: boolean;
   role?: string;
+  /** Where to mount the popup. Overrides `ConfigProvider`'s `getPopupContainer`. */
+  getPopupContainer?: (trigger: HTMLElement) => HTMLElement;
 }
 
 /** Internal floating layer used by Tooltip, Popover, Dropdown, Select, DatePicker… */
@@ -76,6 +78,7 @@ export const Popup = React.forwardRef<HTMLDivElement, PopupProps>(function Popup
     style,
     arrow,
     role,
+    getPopupContainer,
   },
   ref,
 ) {
@@ -175,7 +178,7 @@ export const Popup = React.forwardRef<HTMLDivElement, PopupProps>(function Popup
     <>
       {anchor}
       {mounted && content != null && (
-        <Portal>
+        <Portal container={getPopupContainer && anchorRef.current ? getPopupContainer(anchorRef.current) : undefined}>
           <div
             ref={mergeRefs<HTMLDivElement>(popRef, ref, setPopNode as React.Ref<HTMLDivElement>)}
             role={role}

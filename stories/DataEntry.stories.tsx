@@ -198,3 +198,54 @@ export const FormLayout: StoryObj = {
     </Card>
   ),
 };
+
+export const SegmentedMultiLine: StoryObj = {
+  name: 'Segmented: two-line labels',
+  render: () => {
+    const [v, setV] = React.useState<string>('all');
+    const opt = (value: string, title: string, sub: string) => ({
+      value,
+      label: (
+        <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1.25 }}>
+          <b>{title}</b>
+          <small style={{ opacity: 0.7 }}>{sub}</small>
+        </span>
+      ),
+    });
+    return (
+      <Card style={{ maxWidth: 560 }}>
+        <Segmented
+          aria-label="Vowel group"
+          block
+          value={v}
+          onChange={setV}
+          options={[opt('a', 'a o e', 'Simple'), opt('i', 'i', 'Starts with i'), opt('u', 'u', 'Starts with u'), opt('all', 'All', 'Whole table')]}
+        />
+        <Text type="secondary" style={{ display: 'block', marginTop: 12 }}>Items grow to fit their label. Value: {v}</Text>
+      </Card>
+    );
+  },
+};
+
+export const SelectInFullscreen: StoryObj = {
+  name: 'Select inside fullscreen',
+  render: () => {
+    const box = React.useRef<HTMLDivElement>(null);
+    const [v, setV] = React.useState<string | null>('banana');
+    return (
+      <div ref={box} className="lg-glass" style={{ padding: 20, borderRadius: 16, maxWidth: 560 }}>
+        <Flex vertical gap="md">
+          <Text type="secondary">
+            While an element is in fullscreen, popups mount inside it instead of <code>document.body</code>, so the dropdown stays
+            visible. Set <code>getPopupContainer</code> on <code>ConfigProvider</code> or on a single <code>Select</code> to choose
+            another container.
+          </Text>
+          <Select options={fruits} value={v} onChange={setV} placeholder="Pick a fruit" />
+          <Button onClick={() => (document.fullscreenElement ? document.exitFullscreen() : box.current?.requestFullscreen())}>
+            Toggle fullscreen
+          </Button>
+        </Flex>
+      </div>
+    );
+  },
+};

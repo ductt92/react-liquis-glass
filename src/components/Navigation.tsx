@@ -25,9 +25,12 @@ export interface TabsProps {
   centered?: boolean;
   tabBarExtra?: React.ReactNode;
   className?: string;
+  /** Accessible name for the tab list. */
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
 }
 
-export const Tabs: React.FC<TabsProps> = ({ items, activeKey, defaultActiveKey, onChange, onClose, variant = 'line', size = 'md', centered, tabBarExtra, className }) => {
+export const Tabs: React.FC<TabsProps> = ({ items, activeKey, defaultActiveKey, onChange, onClose, variant = 'line', size = 'md', centered, tabBarExtra, className, 'aria-label': ariaLabel, 'aria-labelledby': ariaLabelledby }) => {
   const t = useLocale();
   const [active, setActive] = useControlled(activeKey, defaultActiveKey ?? items[0]?.key, onChange);
   const refs = React.useRef<Record<string, HTMLButtonElement | null>>({});
@@ -49,7 +52,7 @@ export const Tabs: React.FC<TabsProps> = ({ items, activeKey, defaultActiveKey, 
   return (
     <div className={cx('lg-tabs', `lg-tabs-${variant}`, `lg-tabs-${size}`, className)}>
       <div className={cx('lg-tabs-bar', variant !== 'line' && 'lg-glass', centered && 'lg-tabs-centered')}>
-        <div role="tablist" className="lg-tabs-list" onKeyDown={onKey}>
+        <div role="tablist" aria-label={ariaLabel} aria-labelledby={ariaLabelledby} className="lg-tabs-list" onKeyDown={onKey}>
           {ind && variant !== 'card' && <span className="lg-tabs-indicator" style={{ transform: `translateX(${ind.left}px)`, width: ind.width }} />}
           {items.map((it) => (
             <button

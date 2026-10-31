@@ -1,3 +1,4 @@
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button, ButtonGroup, Card, Divider, IconButton, Paragraph, Space, Text, Title } from 'react-liquis-glass';
 import { DownloadIcon, PlusIcon, HeartIcon, TrashIcon, ShareIcon, ChevronLeftIcon, ChevronRightIcon, SettingsIcon } from 'react-liquis-glass/icons';
@@ -100,6 +101,29 @@ export const Typography: StoryObj = {
         This is a very long paragraph that will be clamped to two lines. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua.
       </Paragraph>
+    </Card>
+  ),
+};
+
+/** Stand-in for a router link (React Router, Next.js…): it takes `to` and renders an anchor. */
+const RouterLink = React.forwardRef<HTMLAnchorElement, React.AnchorHTMLAttributes<HTMLAnchorElement> & { to: string }>(
+  ({ to, ...rest }, ref) => <a ref={ref} href={`#${to}`} {...rest} />,
+);
+
+export const AsRouterLink: S = {
+  name: 'As a router link',
+  render: () => (
+    <Card>
+      <Text type="secondary">
+        <code>as</code> renders the button as another component, so it can be a router link: <code>{'<Button as={Link} to="/settings">'}</code>.
+        Disabled links can't be clicked or reached with Tab.
+      </Text>
+      <Space wrap style={{ marginTop: 12 }}>
+        <Button as={RouterLink} to="/settings" variant="filled" color="primary" icon={<SettingsIcon />}>Settings</Button>
+        <Button as={RouterLink} to="/downloads" icon={<DownloadIcon />}>Downloads</Button>
+        <IconButton as={RouterLink} to="/new" aria-label="New item" icon={<PlusIcon />} />
+        <Button as={RouterLink} to="/nowhere" disabled>Disabled link</Button>
+      </Space>
     </Card>
   ),
 };
